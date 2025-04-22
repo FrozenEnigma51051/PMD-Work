@@ -43,12 +43,12 @@
 
                             <div class="row">
                                 <div class="col-md-12 mb-3">
-                                    <label for="location_state" class="form-label">State</label>
-                                    <input type="text" class="form-control" id="location_state" name="location_state" readonly>
+                                    <label for="location_city" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="location_city" name="location_city" readonly>
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label for="location_district" class="form-label">District</label>
-                                    <input type="text" class="form-control" id="location_district" name="location_district" readonly>
+                                    <label for="location_state" class="form-label">State</label>
+                                    <input type="text" class="form-control" id="location_state" name="location_state" readonly>
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <label for="time_zone" class="form-label">Time Zone</label>
@@ -276,7 +276,7 @@
                     'locationInformation': 'Location Information',
                     'getMyCurrentLocation': 'Get My Current Location',
                     'state': 'State',
-                    'district': 'District',
+                    'city': 'City',
                     'timeZone': 'Time Zone',
                     'eventDateAndTime': 'Event Date and Time',
                     'dateOfWeatherEvent': 'Date of Weather Event',
@@ -327,7 +327,7 @@
                     'locationInformation': 'مقام کی معلومات',
                     'getMyCurrentLocation': 'میرا موجودہ مقام حاصل کریں',
                     'state': 'ریاست',
-                    'district': 'ضلع',
+                    'city': 'ضلع',
                     'timeZone': 'ٹائم زون',
                     'eventDateAndTime': 'واقعے کی تاریخ اور وقت',
                     'dateOfWeatherEvent': 'موسمی واقعے کی تاریخ',
@@ -446,7 +446,7 @@
                 
                 // Map form labels
                 mapElementByText('label[for="location_state"]', 'state');
-                mapElementByText('label[for="location_district"]', 'district');
+                mapElementByText('label[for="location_city"]', 'city');
                 mapElementByText('label[for="time_zone"]', 'timeZone');
                 mapElementByText('label[for="event_date"]', 'dateOfWeatherEvent');
                 mapElementByText('label[for="event_time"]', 'timeOfWeatherEvent');
@@ -541,7 +541,7 @@
             const getLocationBtn = document.getElementById('getLocationBtn');
             const locationStatus = document.getElementById('locationStatus');
             const stateInput = document.getElementById('location_state');
-            const districtInput = document.getElementById('location_district');
+            const cityInput = document.getElementById('location_city');
             const timeZoneInput = document.getElementById('time_zone');
 
             // Mapbox token (should ideally be passed from your Laravel backend)
@@ -633,28 +633,27 @@
                             
                             // Use Mapbox Geocoding API for reverse geocoding
                             const mapboxToken = mapboxgl.accessToken;
-                            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}&types=region,district,locality`)
+                            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}&types=place,region`)
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.features && data.features.length > 0) {
-                                        // Extract state and district from features
+                                        // Extract city and state from features
+                                        let city = '';
                                         let state = '';
-                                        let district = '';
                                         
-                                        // Process features to find administrative levels
+                                        // Process features to find city and state
                                         data.features.forEach(feature => {
+                                            if (feature.place_type.includes('place')) {
+                                                city = feature.text;
+                                            }
                                             if (feature.place_type.includes('region')) {
                                                 state = feature.text;
-                                            }
-                                            if (feature.place_type.includes('district') || 
-                                                feature.place_type.includes('locality')) {
-                                                district = feature.text;
                                             }
                                         });
                                         
                                         // Set the values
+                                        cityInput.value = city || 'Unknown city';
                                         stateInput.value = state || 'Unknown state';
-                                        districtInput.value = district || 'Unknown district';
                                         
                                         // Handle timezone - for Pakistan specifically
                                         if (data.features.some(f => f.text.includes('Islamabad') || 
@@ -675,8 +674,8 @@
                                     setTranslatedLocationStatus('errorRetrievingLocation');
                                     
                                     // Make fields editable if geocoding fails
+                                    cityInput.readOnly = false;
                                     stateInput.readOnly = false;
-                                    districtInput.readOnly = false;
                                     timeZoneInput.readOnly = false;
                                 });
                         },
@@ -697,8 +696,8 @@
                             }
                             
                             // Make fields editable if geolocation fails
+                            cityInput.readOnly = false;
                             stateInput.readOnly = false;
-                            districtInput.readOnly = false;
                             timeZoneInput.readOnly = false;
                         }
                     );
@@ -706,8 +705,8 @@
                     setTranslatedLocationStatus('geolocationNotSupported');
                     
                     // Make fields editable if geolocation is not supported
+                    cityInput.readOnly = false;
                     stateInput.readOnly = false;
-                    districtInput.readOnly = false;
                     timeZoneInput.readOnly = false;
                 }
             });
