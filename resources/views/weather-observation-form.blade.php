@@ -327,7 +327,7 @@
                     'locationInformation': 'مقام کی معلومات',
                     'getMyCurrentLocation': 'میرا موجودہ مقام حاصل کریں',
                     'state': 'ریاست',
-                    'city': 'ضلع',
+                    'city': 'شہر',
                     'timeZone': 'ٹائم زون',
                     'eventDateAndTime': 'واقعے کی تاریخ اور وقت',
                     'dateOfWeatherEvent': 'موسمی واقعے کی تاریخ',
@@ -655,14 +655,26 @@
                                         cityInput.value = city || 'Unknown city';
                                         stateInput.value = state || 'Unknown state';
                                         
-                                        // Handle timezone - for Pakistan specifically
+                                        // Get timezone in IANA region format
+                                        const regionTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                                        
+                                        // Special case for Pakistan
+                                        let timeZoneRegion = regionTimeZone;
                                         if (data.features.some(f => f.text.includes('Islamabad') || 
                                             f.place_name.includes('Pakistan'))) {
-                                            timeZoneInput.value = 'Asia/Karachi';
-                                        } else {
-                                            // Fallback to browser timezone
-                                            timeZoneInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                                            timeZoneRegion = 'Asia/Karachi';
                                         }
+                                        
+                                        // Get timezone offset in GMT format
+                                        const date = new Date();
+                                        const offsetMinutes = date.getTimezoneOffset();
+                                        const offsetHours = Math.abs(Math.floor(offsetMinutes / 60));
+                                        const offsetMinutesRemainder = Math.abs(offsetMinutes % 60);
+                                        const offsetSign = offsetMinutes <= 0 ? '+' : '-';
+                                        const gmtString = `GMT${offsetSign}${offsetHours}${offsetMinutesRemainder > 0 ? ':' + offsetMinutesRemainder.toString().padStart(2, '0') : ''}`;
+                                        
+                                        // Set combined timezone value
+                                        timeZoneInput.value = `${timeZoneRegion} (${gmtString})`;
                                         
                                         setTranslatedLocationStatus('locationDetailsRetrieved');
                                     } else {
