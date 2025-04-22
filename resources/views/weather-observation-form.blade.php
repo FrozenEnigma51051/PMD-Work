@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Observation Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Add Mapbox GL JS CSS and JS -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
 </head>
@@ -269,10 +267,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ===============================================
             // LANGUAGE TRANSLATION FUNCTIONALITY
-            // ===============================================
-            
+           
             // Language translations object
             const translations = {
                 'en': {
@@ -539,9 +535,7 @@
                 elementsMap.get(key).push(element);
             }
 
-            // ===============================================
             // GEOLOCATION & MAP FUNCTIONALITY
-            // ===============================================
             
             // Geolocation handling
             const getLocationBtn = document.getElementById('getLocationBtn');
@@ -718,9 +712,7 @@
                 }
             });
 
-            // ===============================================
             // FORM VALIDATION
-            // ===============================================
             
             // Weather phenomena incompatibility logic
             const dustStormCheckbox = document.getElementById('weather_duststorm');
@@ -756,9 +748,7 @@
                 });
             }
 
-            // ===============================================
             // LANGUAGE SELECTION HANDLING
-            // ===============================================
             
             // Handle language selection
             languageButtons.forEach(button => {

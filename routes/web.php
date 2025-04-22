@@ -11,7 +11,7 @@ Route::get('/weather-form', function () {
     return view('weather-observation-form');
 });
 Route::post('/weather/store', function () {
-    // For testing, just redirect back or to a success page
+    // For testing
     return back()->with('success', 'Form submitted successfully!');
 })->name('weather.store');
 
