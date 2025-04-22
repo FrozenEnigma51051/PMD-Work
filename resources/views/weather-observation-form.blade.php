@@ -93,56 +93,56 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_rain" name="weather_types[]" value="rain">
-                                <img src="/placeholder-images/rain.png" alt="Rain Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/rain.jpg') }}" alt="Rain Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_rain">Rain</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_drizzle" name="weather_types[]" value="drizzle">
-                                <img src="/placeholder-images/drizzle.png" alt="Drizzle Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/drizzle.jpg') }}" alt="Drizzle Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_drizzle">Drizzle</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_thunder" name="weather_types[]" value="thunder_lightning">
-                                <img src="/placeholder-images/thunder.png" alt="Thunder/Lightning Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/thunder.jpg') }}" alt="Thunder/Lightning Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_thunder">Thunder/Lightning</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_hail" name="weather_types[]" value="hailstorm">
-                                <img src="/placeholder-images/hail.png" alt="Hailstorm Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/hail.jpg') }}" alt="Hailstorm Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_hail">Hailstorm</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type incompatible-group-1" type="checkbox" id="weather_duststorm" name="weather_types[]" value="duststorm">
-                                <img src="/placeholder-images/duststorm.png" alt="Duststorm Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/duststorm.webp') }}" alt="Duststorm Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_duststorm">Duststorm</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type incompatible-group-1" type="checkbox" id="weather_fog" name="weather_types[]" value="fog">
-                                <img src="/placeholder-images/fog.png" alt="Fog Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/fog.jpg') }}" alt="Fog Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_fog">Fog</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_snow" name="weather_types[]" value="snow">
-                                <img src="/placeholder-images/snow.png" alt="Snow Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/snow.jpg') }}" alt="Snow Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_snow">Snow</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_gusty_wind" name="weather_types[]" value="gusty_wind">
-                                <img src="/placeholder-images/wind.png" alt="Gusty Wind Icon" width="24" height="24" class="me-2">
+                                <img src="{{ asset('images/wind.webp') }}" alt="Gusty Wind Icon" width="24" height="24" class="me-2">
                                 <label class="form-check-label" for="weather_gusty_wind">Gusty Wind (>62km/h)</label>
                             </div>
                         </div>
