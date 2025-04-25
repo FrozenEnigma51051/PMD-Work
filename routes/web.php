@@ -15,6 +15,6 @@ Route::post('/weather/store', function () {
     return back()->with('success', 'Form submitted successfully!');
 })->name('weather.store');
 
-Route::get('/test-form', function () {
+Route::get('/public-form', function () {
     return view('weather-observation-form');
 });
