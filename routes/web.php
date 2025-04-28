@@ -4,11 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\StationController;
+use App\Http\Middleware\CheckIfAdmin;
+use App\Http\Middleware\CheckIfActive;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,14 +40,14 @@ Route::post('register', [RegisterController::class, 'register']);
 // Password Reset Routes
 Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-// Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-// Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Dynamic Dropdown for Stations
 Route::get('/stations/by-region', [StationController::class, 'getStationsByRegion'])->name('stations.by-region');
 
 // Admin Routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', CheckIfAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
     
     // User Management
@@ -54,7 +57,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 // User Routes
-Route::middleware(['auth', 'active'])->prefix('user')->name('user.')->group(function () {
+Route::middleware(['auth', CheckIfActive::class])->prefix('user')->name('user.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Profile Management
@@ -65,7 +68,7 @@ Route::middleware(['auth', 'active'])->prefix('user')->name('user.')->group(func
 // Redirect after login based on user role
 Route::get('/home', function () {
     if (auth()->check()) {
-        if (auth()->user()->isAdmin()) {
+        if (auth()->user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         } else {
             return redirect()->route('user.dashboard');

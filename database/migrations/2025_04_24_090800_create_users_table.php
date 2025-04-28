@@ -22,11 +22,10 @@ return new class extends Migration
             $table->enum('designation', ['Observer', 'Senior Observer']);
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->enum('status', ['active', 'inactive'])->default('inactive');
-            $table->enum('role', ['admin', 'user'])->default('user');  // Add this line
+            $table->enum('role', ['admin', 'user'])->default('user');
             $table->date('date_of_birth')->nullable();
             $table->string('profile_image')->nullable();
             $table->text('description')->nullable();
-            $table->boolean('is_admin')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -10,17 +10,6 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -47,7 +36,7 @@ class LoginController extends Controller
      */
     public function username()
     {
-        return 'username';
+        return 'username'; // Assuming you're using 'username' as the login identifier
     }
 
     /**
@@ -75,18 +64,35 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
+        // If the user is not active, log them out and show a validation error
         if ($user->status !== 'active') {
             auth()->logout();
-            
+
             throw ValidationException::withMessages([
                 $this->username() => ['Your account is pending admin approval.'],
             ]);
         }
 
+        // Redirect based on the user's role
         if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard');
         }
-        
+
         return redirect()->route('user.dashboard');
+    }
+
+    /**
+     * Determine the redirect path after login (redundant if 'authenticated' method is used)
+     *
+     * @return string
+     */
+    protected function redirectTo()
+    {
+        // This is technically redundant if `authenticated()` handles redirects
+        if (auth()->user()->isAdmin()) {
+            return route('admin.dashboard');
+        } else {
+            return route('user.dashboard');
+        }
     }
 }

@@ -26,10 +26,10 @@ class User extends Authenticatable
         'designation',
         'gender',
         'status',
+        'role',
         'date_of_birth',
         'profile_image',
         'description',
-        'is_admin',
     ];
 
     /**
@@ -51,7 +51,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'date_of_birth' => 'date',
-        'is_admin' => 'boolean',
     ];
 
     /**
@@ -83,6 +82,6 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
-        return $this->is_admin === true;
+        return $this->role === 'admin';
     }
 }

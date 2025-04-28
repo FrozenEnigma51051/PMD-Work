@@ -17,7 +17,7 @@ class CheckIfAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->isAdmin()) {
+        if (!auth()->check() || auth()->user()->role !== 'admin') {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized. Admin access required.'], 403);
             }

@@ -17,7 +17,7 @@ class UserManagementController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'admin']);
+        // Middleware is applied in routes
     }
 
     /**
@@ -30,7 +30,7 @@ class UserManagementController extends Controller
     {
         $status = $request->query('status', 'all');
         
-        $query = User::where('is_admin', false)
+        $query = User::where('role', 'user')
             ->with(['region', 'station']);
             
         if ($status !== 'all') {

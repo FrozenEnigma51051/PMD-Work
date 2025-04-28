@@ -25,8 +25,7 @@ class AdminSeeder extends Seeder
             'designation' => 'Senior Observer',
             'gender' => 'Male',
             'status' => 'active',
-            'role' => 'admin', 
-            'is_admin' => true,
+            'role' => 'admin',
             'date_of_birth' => '1990-01-01',
             'description' => 'System administrator',
         ]);

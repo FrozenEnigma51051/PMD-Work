@@ -15,7 +15,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h5 class="card-title">Total Users</h5>
-                            <h2 class="mb-0">{{ $totalUsers }}</h2>
+                            <h2 class="mb-0">{{ $total_users }}</h2>
                         </div>
                         <i class="bi bi-people fs-1"></i>
                     </div>
@@ -32,7 +32,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h5 class="card-title">Pending Approvals</h5>
-                            <h2 class="mb-0">{{ $pendingUsers }}</h2>
+                            <h2 class="mb-0">{{ $pending_users }}</h2>
                         </div>
                         <i class="bi bi-person-exclamation fs-1"></i>
                     </div>
@@ -49,7 +49,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h5 class="card-title">Active Users</h5>
-                            <h2 class="mb-0">{{ $activeUsers }}</h2>
+                            <h2 class="mb-0">{{ $active_users }}</h2>
                         </div>
                         <i class="bi bi-person-check fs-1"></i>
                     </div>
@@ -68,7 +68,7 @@
                     <h5 class="mb-0">Recent Registration Requests</h5>
                 </div>
                 <div class="card-body">
-                    @if($recentInactiveUsers->count() > 0)
+                    @if($recent_inactive_users->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -82,7 +82,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($recentInactiveUsers as $user)
+                                    @foreach($recent_inactive_users as $user)
                                         <tr>
                                             <td>{{ $user->username }}</td>
                                             <td>{{ $user->email }}</td>
@@ -95,7 +95,6 @@
                                                 </a>
                                                 <form action="{{ route('admin.users.approve', $user) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    @method('PATCH')
                                                     <button type="submit" class="btn btn-sm btn-success">
                                                         <i class="bi bi-check-circle"></i> Approve
                                                     </button>
@@ -153,9 +152,9 @@
         new Chart(regionCtx, {
             type: 'pie',
             data: {
-                labels: {!! json_encode($regionStats->pluck('name')) !!},
+                labels: {!! json_encode($region_stats->pluck('name')) !!},
                 datasets: [{
-                    data: {!! json_encode($regionStats->pluck('count')) !!},
+                    data: {!! json_encode($region_stats->pluck('count')) !!},
                     backgroundColor: [
                         'rgba(54, 162, 235, 0.7)',
                         'rgba(255, 99, 132, 0.7)',
@@ -173,10 +172,10 @@
         new Chart(designationCtx, {
             type: 'bar',
             data: {
-                labels: {!! json_encode($designationStats->pluck('designation')) !!},
+                labels: {!! json_encode($designation_stats->pluck('designation')) !!},
                 datasets: [{
                     label: 'Users',
-                    data: {!! json_encode($designationStats->pluck('count')) !!},
+                    data: {!! json_encode($designation_stats->pluck('count')) !!},
                     backgroundColor: 'rgba(54, 162, 235, 0.7)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
