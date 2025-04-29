@@ -15,7 +15,7 @@ class CheckIfActive
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
         if (auth()->check() && auth()->user()->status !== 'active') {
             auth()->logout();

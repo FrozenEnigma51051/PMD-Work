@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\CheckIfActive;
 use App\Models\Region;
 use App\Models\Station;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class ProfileController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'active']);
+        $this->middleware(['auth', CheckIfActive::class]);
     }
 
     /**
