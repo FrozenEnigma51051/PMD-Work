@@ -39,7 +39,10 @@ class UserManagementController extends Controller
         
         $users = $query->latest()->paginate(10);
         
-        return view('admin.users.index', compact('users', 'status'));
+        // Get all regions for the filter dropdown
+        $regions = \App\Models\Region::orderBy('name')->get();
+        
+        return view('admin.users.index', compact('users', 'status', 'regions'));
     }
 
     /**
@@ -74,5 +77,19 @@ class UserManagementController extends Controller
         
         return redirect()->route('admin.users.index', ['status' => 'inactive'])
             ->with('info', 'User is already active.');
+    }
+    
+    /**
+     * Remove the specified user from storage.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(User $user)
+    {
+        $user->delete();
+        
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User has been deleted successfully.');
     }
 }

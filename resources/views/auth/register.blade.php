@@ -184,7 +184,7 @@
                 return;
             }
             
-            fetch(`/api/regions/${regionId}/stations`)
+            fetch(`/stations/by-region?region_id=${regionId}`)
                 .then(response => response.json())
                 .then(stations => {
                     stationSelect.innerHTML = '<option value="">-- Select Station --</option>';

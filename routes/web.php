@@ -53,7 +53,8 @@ Route::middleware(['auth', CheckIfAdmin::class])->prefix('admin')->name('admin.'
     // User Management
     Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
     Route::get('users/{user}', [UserManagementController::class, 'show'])->name('users.show');
-    Route::post('users/{user}/approve', [UserManagementController::class, 'approve'])->name('users.approve');
+    Route::match(['post', 'patch'], 'users/{user}/approve', [UserManagementController::class, 'approve'])->name('users.approve');
+    Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
 });
 
 // User Routes

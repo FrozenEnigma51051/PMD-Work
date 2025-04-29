@@ -115,7 +115,6 @@
                                         @if($user->status === 'inactive')
                                             <form action="{{ route('admin.users.approve', $user) }}" method="POST">
                                                 @csrf
-                                                @method('PATCH')
                                                 <button type="submit" class="btn btn-sm btn-success">
                                                     <i class="bi bi-check-lg"></i>
                                                 </button>

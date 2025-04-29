@@ -43,7 +43,6 @@
                     @if($user->status === 'inactive')
                         <form action="{{ route('admin.users.approve', $user) }}" method="POST" class="mb-3">
                             @csrf
-                            @method('PATCH')
                             <button type="submit" class="btn btn-success btn-lg w-100">
                                 <i class="bi bi-check-circle"></i> Approve User
                             </button>
