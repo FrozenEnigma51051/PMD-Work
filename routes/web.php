@@ -63,7 +63,9 @@ Route::middleware(['auth', CheckIfActive::class])->prefix('user')->name('user.')
     
     // Profile Management
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('profile/image', [ProfileController::class, 'updateImage'])->name('profile.updateImage');
+    Route::delete('profile/image', [ProfileController::class, 'removeImage'])->name('profile.removeImage');
 });
 
 // Redirect after login based on user role
