@@ -1,0 +1,69 @@
+// Body
+$body-bg: #f8f9fa;
+$body-color: #212529;
+
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Colors
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+
+// Theme Colors
+$primary: #4e73df;
+$secondary: #6c757d;
+$success: #1cc88a;
+$info: #36b9cc;
+$warning: #f6c23e;
+$danger: #e74a3b;
+$light: #f8f9fa;
+$dark: #5a5c69;
+
+// Cards
+$card-cap-bg: white;
+$card-border-width: 0;
+$card-border-radius: 0.5rem;
+$card-inner-border-radius: 0.5rem;
+$card-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+
+// Buttons
+$btn-font-weight: 500;
+$btn-border-radius: 0.25rem;
+$btn-padding-y: 0.5rem;
+$btn-padding-x: 1.25rem;
+
+// Forms
+$input-bg: #fff;
+$input-border-color: #d1d3e2;
+$input-border-radius: 0.25rem;
+$input-focus-border-color: lighten($primary, 25%);
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+$input-placeholder-color: #adb5bd;
+
+// Tables
+$table-border-color: #e3e6f0;
+$table-hover-bg: rgba($primary, 0.05);
+
+// Navs and Navbar
+$navbar-dark-color: rgba(white, 0.8);
+$navbar-dark-hover-color: white;
+$navbar-dark-active-color: white;
+$navbar-dark-bg: $primary;
+$navbar-light-bg: white;
+$navbar-padding-y: 1rem;
+$navbar-padding-x: 1rem;
+
+// Alerts
+$alert-padding-y: 1rem;
+$alert-padding-x: 1.25rem;
+$alert-border-radius: 0.25rem;
