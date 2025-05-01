@@ -11,6 +11,9 @@ class WeatherObservation extends Model
 
     protected $fillable = [
         'user_id',
+        'user_name',
+        'personal_number',
+        'designation',
         'latitude',
         'longitude',
         'location_city',

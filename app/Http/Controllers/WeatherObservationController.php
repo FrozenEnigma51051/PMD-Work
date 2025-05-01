@@ -43,6 +43,9 @@ class WeatherObservationController extends Controller
         // Create the observation
         $observation = WeatherObservation::create([
             'user_id' => Auth::id(),
+            'user_name' => Auth::user()->username,
+            'personal_number' => Auth::user()->personal_number,
+            'designation' => Auth::user()->designation,
             'latitude' => $validated['latitude'],
             'longitude' => $validated['longitude'],
             'location_city' => $validated['location_city'],

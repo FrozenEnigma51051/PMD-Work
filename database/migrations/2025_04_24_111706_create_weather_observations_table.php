@@ -11,6 +11,9 @@ return new class extends Migration
         Schema::create('weather_observations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('user_name');
+            $table->string('personal_number');
+            $table->string('designation');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 11, 8);
             $table->string('location_city');
