@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <form id="weatherObservationForm" method="POST" action="{{ route('weather.store') }}" enctype="multipart/form-data">
+        <form id="weatherObservationForm" method="POST" action="{{ route('weather.observation.store') }}" enctype="multipart/form-data">
             @csrf
             
             <!-- Location Section -->

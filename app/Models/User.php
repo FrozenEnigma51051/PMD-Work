@@ -84,4 +84,9 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function weatherObservations()
+    {
+        return $this->hasMany(WeatherObservation::class);
+    }
 }

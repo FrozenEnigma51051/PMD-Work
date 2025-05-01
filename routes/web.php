@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\StationController;
+use App\Http\Controllers\WeatherObservationController;
 use App\Http\Middleware\CheckIfAdmin;
 use App\Http\Middleware\CheckIfActive;
 
@@ -66,6 +67,10 @@ Route::middleware(['auth', CheckIfActive::class])->prefix('user')->name('user.')
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('profile/image', [ProfileController::class, 'updateImage'])->name('profile.updateImage');
     Route::delete('profile/image', [ProfileController::class, 'removeImage'])->name('profile.removeImage');
+
+    // Weather Observations
+    Route::get('weather-observation/create', [WeatherObservationController::class, 'create'])->name('weather.observation.create');
+    Route::post('weather-observation', [WeatherObservationController::class, 'store'])->name('weather.observation.store');
 });
 
 // Redirect after login based on user role
@@ -80,3 +85,9 @@ Route::get('/home', function () {
     
     return redirect()->route('login');
 })->name('home');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [WeatherObservationController::class, 'index'])->name('dashboard');
+    Route::get('/weather-observation/create', [WeatherObservationController::class, 'create'])->name('weather.observation.create');
+    Route::post('/weather-observation', [WeatherObservationController::class, 'store'])->name('weather.observation.store');
+});

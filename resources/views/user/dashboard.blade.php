@@ -100,6 +100,14 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-grid">
+                                <a href="{{ route('weather.observation.create') }}" class="btn btn-outline-success btn-lg">
+                                    <i class="bi bi-cloud-sun fs-5 me-2"></i>
+                                    Weather Observation Form
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
