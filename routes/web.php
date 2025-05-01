@@ -28,10 +28,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-<<<<<<< HEAD
-Route::get('/public-form', function () {
-    return view('weather-observation-form');
-=======
 // Authentication Routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
@@ -59,7 +55,6 @@ Route::middleware(['auth', CheckIfAdmin::class])->prefix('admin')->name('admin.'
     Route::get('users/{user}', [UserManagementController::class, 'show'])->name('users.show');
     Route::match(['post', 'patch'], 'users/{user}/approve', [UserManagementController::class, 'approve'])->name('users.approve');
     Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
->>>>>>> removal
 });
 
 // User Routes
