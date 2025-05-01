@@ -2,22 +2,23 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Order is important: regions must be created before stations,
+        // and both must exist before creating users that reference them
+        $this->call([
+            RegionSeeder::class,
+            StationSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }
