@@ -108,6 +108,14 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-grid">
+                                <a href="{{ route('weather.observations') }}" class="btn btn-outline-info btn-lg">
+                                    <i class="bi bi-table fs-5 me-2"></i>
+                                    View Weather Reports
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

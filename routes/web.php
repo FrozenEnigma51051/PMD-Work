@@ -87,7 +87,7 @@ Route::get('/home', function () {
 })->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [WeatherObservationController::class, 'index'])->name('dashboard');
+    Route::get('/weather-observations', [WeatherObservationController::class, 'index'])->name('weather.observations');
     Route::get('/weather-observation/create', [WeatherObservationController::class, 'create'])->name('weather.observation.create');
     Route::post('/weather-observation', [WeatherObservationController::class, 'store'])->name('weather.observation.store');
 });

@@ -59,13 +59,13 @@ class WeatherObservationController extends Controller
             'media_files' => $mediaFiles
         ]);
 
-        return redirect()->route('dashboard')
+        return redirect()->route('weather.observations')
             ->with('success', 'Weather observation submitted successfully!');
     }
 
     public function index()
     {
         $observations = Auth::user()->weatherObservations()->latest()->get();
-        return view('dashboard', compact('observations'));
+        return view('weather-observations.index', compact('observations'));
     }
 } 

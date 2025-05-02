@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0">Dashboard</h3>
+                    <h3 class="mb-0">Weather Observations</h3>
                     <a href="{{ route('weather.observation.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle"></i> New Weather Observation
                     </a>
@@ -62,4 +62,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
