@@ -11,7 +11,7 @@ class WeatherObservationController extends Controller
 {
     public function create()
     {
-        return view('weather-observation-form');
+        return view('weather-observations.weather-observation-form');
     }
 
     public function store(Request $request)
