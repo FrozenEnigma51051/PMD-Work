@@ -166,7 +166,7 @@
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_gusty_wind" name="weather_types[]" value="gusty_wind">
                                 <img src="{{ asset('images/wind.webp') }}" alt="Gusty Wind Icon" width="24" height="24" class="me-2">
-                                <label class="form-check-label" for="weather_gusty_wind">Gusty Wind (>62km/h)</label>
+                                <label class="form-check-label" for="weather_gusty_wind">Gusty Wind</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -257,6 +257,18 @@
                                 <label class="form-check-label" for="damage_crops">Damage to vegetation/crops</label>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="damage_other" name="damages[]" value="other_damage">
+                                <label class="form-check-label" for="damage_other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Other damage description field (hidden by default) -->
+                    <div id="otherDamageContainer" class="mt-3" style="display: none;">
+                        <label for="other_damage_description" class="form-label">Please describe the other damage:</label>
+                        <textarea class="form-control" id="other_damage_description" name="other_damage_description" rows="3"></textarea>
                     </div>
                 </div>
             </div>
@@ -320,7 +332,7 @@
                     'duststorm': 'Duststorm',
                     'fog': 'Fog',
                     'snow': 'Snow',
-                    'gustyWind': 'Gusty Wind (>62km/h)',
+                    'gustyWind': 'Gusty Wind',
                     'smog': 'Smog',
                     'duststormFogError': 'Duststorm and Fog cannot be selected together.',
                     'damageCaused': 'Damage Caused',
@@ -335,6 +347,8 @@
                     'damageToLivestock': 'Damage/Death to livestock',
                     'damageToHumans': 'Damage/Death to Humans',
                     'damageToVegetationCrops': 'Damage to vegetation/crops',
+                    'other': 'Other',
+                    'pleaseDescribeOtherDamage': 'Please describe the other damage:',
                     'description': 'Description',
                     'describeWeatherEvent': 'Describe the weather event in detail',
                     'descriptionPlaceholder': 'Please provide any additional details about the weather event...',
@@ -358,7 +372,7 @@
                     'emailAddress': 'Email Address'
                 },
                 'ur': {
-                    'weatherObservationReport': 'موسمی مشاہدے کی رپورٹ',
+                    'weatherObservationReport': 'موسمی مشاہدہ رپورٹ',
                     'locationInformation': 'مقام کی معلومات',
                     'getMyCurrentLocation': 'میرا موجودہ مقام حاصل کریں',
                     'state': 'ریاست',
@@ -376,7 +390,7 @@
                     'duststorm': 'آندھی',
                     'fog': 'دھند',
                     'snow': 'برف',
-                    'gustyWind': 'تیز ہوا (>٦٢ کلومیٹر/گھنٹہ)',
+                    'gustyWind': 'تیز ہوا',
                     'smog': 'دھواں دھند',
                     'duststormFogError': 'آندھی اور دھند ایک ساتھ منتخب نہیں کی جا سکتی۔',
                     'damageCaused': 'پہنچنے والا نقصان',
@@ -391,6 +405,8 @@
                     'damageToLivestock': 'مویشیوں کو نقصان/موت',
                     'damageToHumans': 'انسانوں کو نقصان/موت',
                     'damageToVegetationCrops': 'نباتات/فصلوں کو نقصان',
+                    'other': 'دیگر',
+                    'pleaseDescribeOtherDamage': 'براہ کرم دیگر نقصان کی تفصیل بیان کریں:',
                     'description': 'تفصیل',
                     'describeWeatherEvent': 'موسمی واقعے کی تفصیل بیان کریں',
                     'descriptionPlaceholder': 'براہ کرم موسمی واقعے کے بارے میں کوئی اضافی تفصیلات فراہم کریں...',
@@ -518,6 +534,8 @@
                 mapElementByText('label[for="damage_livestock"]', 'damageToLivestock');
                 mapElementByText('label[for="damage_humans"]', 'damageToHumans');
                 mapElementByText('label[for="damage_crops"]', 'damageToVegetationCrops');
+                mapElementByText('label[for="damage_other"]', 'other');
+                mapElementByText('label[for="other_damage_description"]', 'pleaseDescribeOtherDamage');
                 
                 // Map descriptive text
                 mapElementByText('label[for="event_description"]', 'describeWeatherEvent');
@@ -767,6 +785,22 @@
                     timeZoneInput.readOnly = false;
                 }
             });
+
+            // DAMAGE OTHER FIELD TOGGLE
+            const damageOtherCheckbox = document.getElementById('damage_other');
+            const otherDamageContainer = document.getElementById('otherDamageContainer');
+            
+            if (damageOtherCheckbox && otherDamageContainer) {
+                damageOtherCheckbox.addEventListener('change', function() {
+                    otherDamageContainer.style.display = this.checked ? 'block' : 'none';
+                    
+                    // Make the textarea required only when "Other" is checked
+                    const otherDamageDescription = document.getElementById('other_damage_description');
+                    if (otherDamageDescription) {
+                        otherDamageDescription.required = this.checked;
+                    }
+                });
+            }
 
             // FORM VALIDATION
             

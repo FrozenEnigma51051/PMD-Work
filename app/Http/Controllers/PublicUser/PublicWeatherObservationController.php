@@ -40,6 +40,7 @@ class PublicWeatherObservationController extends Controller
             'event_time' => 'required',
             'weather_types' => 'required|array',
             'damages' => 'nullable|array',
+            'other_damage_description' => 'nullable|string|required_if:damages.*,other_damage',
             'event_description' => 'nullable|string',
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240'
@@ -67,7 +68,7 @@ class PublicWeatherObservationController extends Controller
             'event_date' => $validated['event_date'],
             'event_time' => $validated['event_time'],
             'weather_types' => $validated['weather_types'],
-            'damages' => $validated['damages'] ?? [],
+            'damages' => $this->processDamages($request),
             'event_description' => $validated['event_description'],
             'media_files' => $mediaFiles,
             'status' => 'pending' // Default status for public submissions
@@ -75,6 +76,24 @@ class PublicWeatherObservationController extends Controller
 
         return redirect()->route('public.weather.observation.thank-you')
             ->with('success', 'Weather observation submitted successfully! Thank you for your contribution.');
+    }
+
+    /**
+     * Process damages data to include other_damage_description when applicable
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    private function processDamages(Request $request)
+    {
+        $damages = $request->input('damages', []);
+        
+        // If "other_damage" is selected and description is provided, add it to the damages data
+        if (in_array('other_damage', $damages) && $request->has('other_damage_description')) {
+            $damages['other_damage_description'] = $request->input('other_damage_description');
+        }
+        
+        return $damages;
     }
 
     /**

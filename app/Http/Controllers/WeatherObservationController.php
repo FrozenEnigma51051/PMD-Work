@@ -26,6 +26,7 @@ class WeatherObservationController extends Controller
             'event_time' => 'required',
             'weather_types' => 'required|array',
             'damages' => 'nullable|array',
+            'other_damage_details' => 'nullable|string|required_if:damages.*,other_damage',
             'event_description' => 'nullable|string',
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240'
@@ -38,6 +39,15 @@ class WeatherObservationController extends Controller
                 $path = $file->store('weather-observations/' . Auth::id(), 'public');
                 $mediaFiles[] = $path;
             }
+        }
+
+        // Process damages data
+        $damages = $validated['damages'] ?? [];
+        $otherDamageDetails = $request->input('other_damage_details');
+        
+        // If "other_damage" is selected, store the details along with the damages
+        if (in_array('other_damage', $damages) && $otherDamageDetails) {
+            $damages = array_merge($damages, ['other_damage_details' => $otherDamageDetails]);
         }
 
         // Create the observation
@@ -54,7 +64,7 @@ class WeatherObservationController extends Controller
             'event_date' => $validated['event_date'],
             'event_time' => $validated['event_time'],
             'weather_types' => $validated['weather_types'],
-            'damages' => $validated['damages'] ?? [],
+            'damages' => $damages,
             'event_description' => $validated['event_description'],
             'media_files' => $mediaFiles
         ]);

@@ -143,7 +143,7 @@
                             <div class="form-check">
                                 <input class="form-check-input weather-type" type="checkbox" id="weather_gusty_wind" name="weather_types[]" value="gusty_wind">
                                 <img src="{{ asset('images/wind.webp') }}" alt="Gusty Wind Icon" width="24" height="24" class="me-2">
-                                <label class="form-check-label" for="weather_gusty_wind">Gusty Wind (>62km/h)</label>
+                                <label class="form-check-label" for="weather_gusty_wind">Gusty Wind</label>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -234,6 +234,18 @@
                                 <label class="form-check-label" for="damage_crops">Damage to vegetation/crops</label>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="damage_other" name="damages[]" value="other_damage">
+                                <label class="form-check-label" for="damage_other">Other</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-2" id="other_damage_details_container" style="display: none;">
+                            <div class="form-group">
+                                <label for="other_damage_details" class="form-label">Please specify other damage:</label>
+                                <textarea class="form-control" id="other_damage_details" name="other_damage_details" rows="2" placeholder="Please describe the other damage..."></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,7 +309,7 @@
                     'duststorm': 'Duststorm',
                     'fog': 'Fog',
                     'snow': 'Snow',
-                    'gustyWind': 'Gusty Wind (>62km/h)',
+                    'gustyWind': 'Gusty Wind',
                     'smog': 'Smog',
                     'duststormFogError': 'Duststorm and Fog cannot be selected together.',
                     'damageCaused': 'Damage Caused',
@@ -312,6 +324,9 @@
                     'damageToLivestock': 'Damage/Death to livestock',
                     'damageToHumans': 'Damage/Death to Humans',
                     'damageToVegetationCrops': 'Damage to vegetation/crops',
+                    'otherDamage': 'Other',
+                    'specifyOtherDamage': 'Please specify other damage:',
+                    'otherDamagePlaceholder': 'Please describe the other damage...',
                     'description': 'Description',
                     'describeWeatherEvent': 'Describe the weather event in detail',
                     'descriptionPlaceholder': 'Please provide any additional details about the weather event...',
@@ -349,7 +364,7 @@
                     'duststorm': 'آندھی',
                     'fog': 'دھند',
                     'snow': 'برف',
-                    'gustyWind': 'تیز ہوا (>٦٢ کلومیٹر/گھنٹہ)',
+                    'gustyWind': 'تیز ہوا',
                     'smog': 'سموگ',
                     'duststormFogError': 'آندھی اور دھند ایک ساتھ منتخب نہیں کی جا سکتی۔',
                     'damageCaused': 'پہنچنے والا نقصان',
@@ -364,6 +379,9 @@
                     'damageToLivestock': 'مویشیوں کو نقصان/موت',
                     'damageToHumans': 'انسانوں کو نقصان/موت',
                     'damageToVegetationCrops': 'نباتات/فصلوں کو نقصان',
+                    'otherDamage': 'دیگر',
+                    'specifyOtherDamage': 'براہ کرم دیگر نقصان کی وضاحت کریں:',
+                    'otherDamagePlaceholder': 'براہ کرم دیگر نقصان کی تفصیل بیان کریں...',
                     'description': 'تفصیل',
                     'describeWeatherEvent': 'موسمی واقعے کی تفصیل بیان کریں',
                     'descriptionPlaceholder': 'براہ کرم موسمی واقعے کے بارے میں کوئی اضافی تفصیلات فراہم کریں...',
@@ -483,6 +501,7 @@
                 mapElementByText('label[for="damage_livestock"]', 'damageToLivestock');
                 mapElementByText('label[for="damage_humans"]', 'damageToHumans');
                 mapElementByText('label[for="damage_crops"]', 'damageToVegetationCrops');
+                mapElementByText('label[for="damage_other"]', 'otherDamage');
                 
                 // Map descriptive text
                 mapElementByText('label[for="event_description"]', 'describeWeatherEvent');
@@ -512,6 +531,10 @@
                 addToElementsMap('locationTimeout', { dataset: { translateText: 'Location request timed out.' }});
                 addToElementsMap('unknownLocationError', { dataset: { translateText: 'An unknown error occurred while getting location.' }});
                 addToElementsMap('geolocationNotSupported', { dataset: { translateText: 'Geolocation is not supported by this browser.' }});
+                
+                // Map other damage details
+                mapElementByText('label[for="other_damage_details"]', 'specifyOtherDamage');
+                mapElementByAttribute('#other_damage_details', 'placeholder', 'otherDamagePlaceholder');
             }
 
             // Helper function to map elements by their text content
@@ -756,6 +779,24 @@
             if (dustStormCheckbox && fogCheckbox) {
                 dustStormCheckbox.addEventListener('change', checkIncompatibility);
                 fogCheckbox.addEventListener('change', checkIncompatibility);
+            }
+
+            // Handle the "Other" damage option
+            const damageOtherCheckbox = document.getElementById('damage_other');
+            const otherDamageDetailsContainer = document.getElementById('other_damage_details_container');
+            const otherDamageDetails = document.getElementById('other_damage_details');
+            
+            if (damageOtherCheckbox && otherDamageDetailsContainer) {
+                damageOtherCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        otherDamageDetailsContainer.style.display = 'block';
+                        otherDamageDetails.setAttribute('required', 'required');
+                    } else {
+                        otherDamageDetailsContainer.style.display = 'none';
+                        otherDamageDetails.removeAttribute('required');
+                        otherDamageDetails.value = '';
+                    }
+                });
             }
 
             // Form validation
