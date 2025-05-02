@@ -146,6 +146,13 @@
                                 <label class="form-check-label" for="weather_gusty_wind">Gusty Wind (>62km/h)</label>
                             </div>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input weather-type" type="checkbox" id="weather_smog" name="weather_types[]" value="smog">
+                                <img src="{{ asset('images/smog.jpg') }}" alt="Smog Icon" width="24" height="24" class="me-2">
+                                <label class="form-check-label" for="weather_smog">Smog</label>
+                            </div>
+                        </div>
                     </div>
                     <div id="weatherTypeError" class="text-danger mt-2" style="display: none;">
                         Duststorm and Fog cannot be selected together.
@@ -291,6 +298,7 @@
                     'fog': 'Fog',
                     'snow': 'Snow',
                     'gustyWind': 'Gusty Wind (>62km/h)',
+                    'smog': 'Smog',
                     'duststormFogError': 'Duststorm and Fog cannot be selected together.',
                     'damageCaused': 'Damage Caused',
                     'treeBranchesBreaking': 'Tree branches breaking',
@@ -342,6 +350,7 @@
                     'fog': 'دھند',
                     'snow': 'برف',
                     'gustyWind': 'تیز ہوا (>٦٢ کلومیٹر/گھنٹہ)',
+                    'smog': 'سموگ',
                     'duststormFogError': 'آندھی اور دھند ایک ساتھ منتخب نہیں کی جا سکتی۔',
                     'damageCaused': 'پہنچنے والا نقصان',
                     'treeBranchesBreaking': 'درختوں کی شاخیں ٹوٹنا',
@@ -460,6 +469,7 @@
                 mapElementByText('label[for="weather_fog"]', 'fog');
                 mapElementByText('label[for="weather_snow"]', 'snow');
                 mapElementByText('label[for="weather_gusty_wind"]', 'gustyWind');
+                mapElementByText('label[for="weather_smog"]', 'smog');
                 
                 // Map damage labels
                 mapElementByText('label[for="damage_tree_branches"]', 'treeBranchesBreaking');
