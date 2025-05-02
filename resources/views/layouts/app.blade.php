@@ -11,6 +11,7 @@
 </head>
 <body>
     <div id="app">
+        @if(Route::is('login') || Route::is('register'))
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
@@ -25,6 +26,7 @@
                 </div>
             </div>
         </nav>
+        @endif
         
         @yield('content')
     </div>
