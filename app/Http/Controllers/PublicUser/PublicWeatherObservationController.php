@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers\PublicUser;
+
+use App\Http\Controllers\Controller;
+use App\Models\PublicWeatherObservation;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class PublicWeatherObservationController extends Controller
+{
+    /**
+     * Show the form for creating a new public weather observation.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('public-user.public-form');
+    }
+
+    /**
+     * Store a newly created public weather observation in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'personal_name' => 'required|string|max:255',
+            'personal_phone' => 'required|string|max:20',
+            'personal_email' => 'required|email|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'location_city' => 'required|string',
+            'location_state' => 'required|string',
+            'time_zone' => 'required|string',
+            'event_date' => 'required|date',
+            'event_time' => 'required',
+            'weather_types' => 'required|array',
+            'damages' => 'nullable|array',
+            'event_description' => 'nullable|string',
+            'media_files' => 'nullable|array',
+            'media_files.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240'
+        ]);
+
+        // Handle file uploads
+        $mediaFiles = [];
+        if ($request->hasFile('media_files')) {
+            foreach ($request->file('media_files') as $file) {
+                $path = $file->store('public-weather-observations', 'public');
+                $mediaFiles[] = $path;
+            }
+        }
+
+        // Create the public observation
+        $observation = PublicWeatherObservation::create([
+            'personal_name' => $validated['personal_name'],
+            'personal_phone' => $validated['personal_phone'],
+            'personal_email' => $validated['personal_email'],
+            'latitude' => $validated['latitude'],
+            'longitude' => $validated['longitude'],
+            'location_city' => $validated['location_city'],
+            'location_state' => $validated['location_state'],
+            'time_zone' => $validated['time_zone'],
+            'event_date' => $validated['event_date'],
+            'event_time' => $validated['event_time'],
+            'weather_types' => $validated['weather_types'],
+            'damages' => $validated['damages'] ?? [],
+            'event_description' => $validated['event_description'],
+            'media_files' => $mediaFiles,
+            'status' => 'pending' // Default status for public submissions
+        ]);
+
+        return redirect()->route('public.weather.observation.thank-you')
+            ->with('success', 'Weather observation submitted successfully! Thank you for your contribution.');
+    }
+
+    /**
+     * Display a thank you page after successful submission.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function thankYou()
+    {
+        return view('public-user.thank-you');
+    }
+}

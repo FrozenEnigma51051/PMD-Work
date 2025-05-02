@@ -11,6 +11,7 @@ use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\WeatherObservationController;
+use App\Http\Controllers\PublicUser\PublicWeatherObservationController;
 use App\Http\Middleware\CheckIfAdmin;
 use App\Http\Middleware\CheckIfActive;
 
@@ -71,6 +72,13 @@ Route::middleware(['auth', CheckIfActive::class])->prefix('user')->name('user.')
     // Weather Observations
     Route::get('weather-observation/create', [WeatherObservationController::class, 'create'])->name('weather.observation.create');
     Route::post('weather-observation', [WeatherObservationController::class, 'store'])->name('weather.observation.store');
+});
+
+// Public Weather Observation Routes
+Route::prefix('public')->name('public.')->group(function () {
+    Route::get('weather-observation', [PublicWeatherObservationController::class, 'create'])->name('weather.observation.create');
+    Route::post('weather-observation', [PublicWeatherObservationController::class, 'store'])->name('weather.observation.store');
+    Route::get('weather-observation/thank-you', [PublicWeatherObservationController::class, 'thankYou'])->name('weather.observation.thank-you');
 });
 
 // Redirect after login based on user role
