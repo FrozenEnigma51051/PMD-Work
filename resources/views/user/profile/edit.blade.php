@@ -104,6 +104,7 @@
                             <div class="col-md-6">
                                 <label for="personal_number" class="form-label">Personal Number</label>
                                 <input type="text" class="form-control" id="personal_number" value="{{ auth()->user()->personal_number }}" disabled>
+                                <input type="hidden" name="personal_number" value="{{ auth()->user()->personal_number }}">
                                 <div class="form-text">Personal number cannot be changed.</div>
                             </div>
                             
@@ -125,6 +126,7 @@
                                 <select class="form-select" id="region_id" disabled>
                                     <option>{{ auth()->user()->region->name }}</option>
                                 </select>
+                                <input type="hidden" name="region_id" value="{{ auth()->user()->region_id }}">
                                 <div class="form-text">Region cannot be changed.</div>
                             </div>
                             
@@ -133,6 +135,7 @@
                                 <select class="form-select" id="station_id" disabled>
                                     <option>{{ auth()->user()->station->name }}</option>
                                 </select>
+                                <input type="hidden" name="station_id" value="{{ auth()->user()->station_id }}">
                                 <div class="form-text">Station cannot be changed.</div>
                             </div>
                         </div>
@@ -143,6 +146,7 @@
                                 <select class="form-select" id="designation" disabled>
                                     <option>{{ auth()->user()->designation }}</option>
                                 </select>
+                                <input type="hidden" name="designation" value="{{ auth()->user()->designation }}">
                                 <div class="form-text">Designation cannot be changed.</div>
                             </div>
                             
@@ -151,6 +155,7 @@
                                 <select class="form-select" id="gender" disabled>
                                     <option>{{ auth()->user()->gender }}</option>
                                 </select>
+                                <input type="hidden" name="gender" value="{{ auth()->user()->gender }}">
                                 <div class="form-text">Gender cannot be changed.</div>
                             </div>
                         </div>
