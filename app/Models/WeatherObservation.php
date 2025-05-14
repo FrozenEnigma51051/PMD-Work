@@ -9,6 +9,11 @@ class WeatherObservation extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     * 
+     * @var array
+     */
     protected $fillable = [
         'user_id',
         'user_name',
@@ -24,9 +29,16 @@ class WeatherObservation extends Model
         'weather_types',
         'damages',
         'event_description',
-        'media_files'
+        'media_files',
+        'status', // Status can be: pending, approved, archived, flagged
+        'flag_reason'
     ];
 
+    /**
+     * The attributes that should be cast.
+     * 
+     * @var array
+     */
     protected $casts = [
         'weather_types' => 'array',
         'damages' => 'array',
@@ -34,6 +46,9 @@ class WeatherObservation extends Model
         'event_date' => 'date',
     ];
 
+    /**
+     * Get the user that owns the weather observation.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);

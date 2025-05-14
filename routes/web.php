@@ -14,6 +14,7 @@ use App\Http\Controllers\WeatherObservationController;
 use App\Http\Controllers\PublicUser\PublicWeatherObservationController;
 use App\Http\Middleware\CheckIfAdmin;
 use App\Http\Middleware\CheckIfActive;
+use App\Http\Controllers\Admin\WeatherObservationManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,13 @@ Route::middleware(['auth', CheckIfAdmin::class])->prefix('admin')->name('admin.'
     Route::get('users/{user}', [UserManagementController::class, 'show'])->name('users.show');
     Route::match(['post', 'patch'], 'users/{user}/approve', [UserManagementController::class, 'approve'])->name('users.approve');
     Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
+    
+    // Weather Observation Management
+    Route::get('weather-observations', [WeatherObservationManagementController::class, 'index'])->name('weather-observations.index');
+    Route::get('weather-observations/{observation}', [WeatherObservationManagementController::class, 'show'])->name('weather-observations.show');
+    Route::patch('weather-observations/{observation}/approve', [WeatherObservationManagementController::class, 'approve'])->name('weather-observations.approve');
+    Route::patch('weather-observations/{observation}/archive', [WeatherObservationManagementController::class, 'archive'])->name('weather-observations.archive');
+    Route::patch('weather-observations/{observation}/flag', [WeatherObservationManagementController::class, 'flag'])->name('weather-observations.flag');
 });
 
 // User Routes

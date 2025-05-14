@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Region;
+use App\Models\WeatherObservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,6 +51,18 @@ class AdminController extends Controller
             ->select('designation', DB::raw('count(*) as count'))
             ->groupBy('designation')
             ->get();
+            
+        // Weather observation statistics
+        $pending_observations = WeatherObservation::where('status', 'pending')->count();
+        $approved_observations = WeatherObservation::where('status', 'approved')->count();
+        $flagged_observations = WeatherObservation::where('status', 'flagged')->count();
+        $total_observations = WeatherObservation::count();
+        
+        // Recent pending observations
+        $recent_pending_observations = WeatherObservation::where('status', 'pending')
+            ->latest()
+            ->take(5)
+            ->get();
         
         return view('admin.dashboard', compact(
             'pending_users',
@@ -57,7 +70,12 @@ class AdminController extends Controller
             'total_users',
             'recent_inactive_users',
             'region_stats',
-            'designation_stats'
+            'designation_stats',
+            'pending_observations',
+            'approved_observations',
+            'flagged_observations',
+            'total_observations',
+            'recent_pending_observations'
         ));
     }
 }

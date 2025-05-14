@@ -29,7 +29,7 @@ class WeatherObservationController extends Controller
             'other_damage_details' => 'nullable|string|required_if:damages.*,other_damage',
             'event_description' => 'nullable|string',
             'media_files' => 'nullable|array',
-            'media_files.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240'
+            'media_files.*' => 'file|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
         // Handle file uploads
@@ -66,9 +66,20 @@ class WeatherObservationController extends Controller
             'weather_types' => $validated['weather_types'],
             'damages' => $damages,
             'event_description' => $validated['event_description'],
-            'media_files' => $mediaFiles
+            'media_files' => $mediaFiles,
+            'status' => 'pending' // Set default status to pending
         ]);
 
+        // Handle AJAX requests differently
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Weather observation submitted successfully!',
+                'redirect' => route('weather.observations')
+            ]);
+        }
+
+        // Regular form submission response
         return redirect()->route('weather.observations')
             ->with('success', 'Weather observation submitted successfully!');
     }
