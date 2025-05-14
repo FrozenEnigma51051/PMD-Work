@@ -118,8 +118,41 @@
                             <div class="col-md-6">
                                 <select id="designation" class="form-select @error('designation') is-invalid @enderror" name="designation" required>
                                     <option value="">-- Select Designation --</option>
-                                    <option value="Observer" {{ old('designation') == 'Observer' ? 'selected' : '' }}>Observer</option>
+                                    <option value="Director General" {{ old('designation') == 'Director General' ? 'selected' : '' }}>Director General</option>
+                                    <option value="Chief Meteorologist" {{ old('designation') == 'Chief Meteorologist' ? 'selected' : '' }}>Chief Meteorologist</option>
+                                    <option value="Director (Engineering) / Principal Engineer" {{ old('designation') == 'Director (Engineering) / Principal Engineer' ? 'selected' : '' }}>Director (Engineering) / Principal Engineer</option>
+                                    <option value="Director / Principal Meteorologist" {{ old('designation') == 'Director / Principal Meteorologist' ? 'selected' : '' }}>Director / Principal Meteorologist</option>
+                                    <option value="Senior Private Secretary" {{ old('designation') == 'Senior Private Secretary' ? 'selected' : '' }}>Senior Private Secretary</option>
+                                    <option value="Deputy Director / Senior Meteorologist" {{ old('designation') == 'Deputy Director / Senior Meteorologist' ? 'selected' : '' }}>Deputy Director / Senior Meteorologist</option>
+                                    <option value="Senior Programmer" {{ old('designation') == 'Senior Programmer' ? 'selected' : '' }}>Senior Programmer</option>
+                                    <option value="Deputy Chief Administrative Officer" {{ old('designation') == 'Deputy Chief Administrative Officer' ? 'selected' : '' }}>Deputy Chief Administrative Officer</option>
+                                    <option value="Sr. Electronic Engineer / Deputy Director (Engineering)" {{ old('designation') == 'Sr. Electronic Engineer / Deputy Director (Engineering)' ? 'selected' : '' }}>Sr. Electronic Engineer / Deputy Director (Engineering)</option>
+                                    <option value="Administrative Officer" {{ old('designation') == 'Administrative Officer' ? 'selected' : '' }}>Administrative Officer</option>
+                                    <option value="Meteorologist" {{ old('designation') == 'Meteorologist' ? 'selected' : '' }}>Meteorologist</option>
+                                    <option value="Accounts Officer" {{ old('designation') == 'Accounts Officer' ? 'selected' : '' }}>Accounts Officer</option>
+                                    <option value="Librarian" {{ old('designation') == 'Librarian' ? 'selected' : '' }}>Librarian</option>
+                                    <option value="Security Officer" {{ old('designation') == 'Security Officer' ? 'selected' : '' }}>Security Officer</option>
+                                    <option value="Electronics Engineer" {{ old('designation') == 'Electronics Engineer' ? 'selected' : '' }}>Electronics Engineer</option>
+                                    <option value="Programmer" {{ old('designation') == 'Programmer' ? 'selected' : '' }}>Programmer</option>
+                                    <option value="Assistant Meteorologist" {{ old('designation') == 'Assistant Meteorologist' ? 'selected' : '' }}>Assistant Meteorologist</option>
+                                    <option value="Superintendent" {{ old('designation') == 'Superintendent' ? 'selected' : '' }}>Superintendent</option>
+                                    <option value="Assistant Private Secretary" {{ old('designation') == 'Assistant Private Secretary' ? 'selected' : '' }}>Assistant Private Secretary</option>
+                                    <option value="Assistant Programmer" {{ old('designation') == 'Assistant Programmer' ? 'selected' : '' }}>Assistant Programmer</option>
+                                    <option value="Assistant Mechanical Engineer" {{ old('designation') == 'Assistant Mechanical Engineer' ? 'selected' : '' }}>Assistant Mechanical Engineer</option>
+                                    <option value="Assistant Electronic Engineer" {{ old('designation') == 'Assistant Electronic Engineer' ? 'selected' : '' }}>Assistant Electronic Engineer</option>
+                                    <option value="Head Draughtsman" {{ old('designation') == 'Head Draughtsman' ? 'selected' : '' }}>Head Draughtsman</option>
+                                    <option value="Assistant Ministerial" {{ old('designation') == 'Assistant Ministerial' ? 'selected' : '' }}>Assistant Ministerial</option>
+                                    <option value="Data Entry Operator" {{ old('designation') == 'Data Entry Operator' ? 'selected' : '' }}>Data Entry Operator</option>
+                                    <option value="Meteorological Assistant" {{ old('designation') == 'Meteorological Assistant' ? 'selected' : '' }}>Meteorological Assistant</option>
+                                    <option value="Stenotypist" {{ old('designation') == 'Stenotypist' ? 'selected' : '' }}>Stenotypist</option>
+                                    <option value="Sub Engineer (Electronics)" {{ old('designation') == 'Sub Engineer (Electronics)' ? 'selected' : '' }}>Sub Engineer (Electronics)</option>
+                                    <option value="Sub Engineer (Mechanical)" {{ old('designation') == 'Sub Engineer (Mechanical)' ? 'selected' : '' }}>Sub Engineer (Mechanical)</option>
+                                    <option value="Mechanical Assistant" {{ old('designation') == 'Mechanical Assistant' ? 'selected' : '' }}>Mechanical Assistant</option>
+                                    <option value="Draughtsman" {{ old('designation') == 'Draughtsman' ? 'selected' : '' }}>Draughtsman</option>
+                                    <option value="Upper Division Clerk" {{ old('designation') == 'Upper Division Clerk' ? 'selected' : '' }}>Upper Division Clerk</option>
+                                    <option value="Lower Division Clerk" {{ old('designation') == 'Lower Division Clerk' ? 'selected' : '' }}>Lower Division Clerk</option>
                                     <option value="Senior Observer" {{ old('designation') == 'Senior Observer' ? 'selected' : '' }}>Senior Observer</option>
+                                    <option value="Observer" {{ old('designation') == 'Observer' ? 'selected' : '' }}>Observer</option>
                                 </select>
 
                                 @error('designation')

@@ -17,6 +17,10 @@ class RegionSeeder extends Seeder
         $regions = [
             ['name' => 'Punjab'],
             ['name' => 'KPK'],
+            ['name' => 'Azad Kashmir'],
+            ['name' => 'Northern Areas'],
+            ['name' => 'Sindh & Balochistan'],
+            ['name' => 'Quetta'],
         ];
 
         foreach ($regions as $region) {
