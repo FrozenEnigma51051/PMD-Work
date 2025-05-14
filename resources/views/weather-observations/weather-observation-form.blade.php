@@ -270,9 +270,25 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label for="media_files" class="form-label">Upload Images and Videos</label>
-                        <input type="file" class="form-control" id="media_files" name="media_files[]" multiple accept="image/*,video/*">
-                        <div class="form-text">You can select multiple files. Accepted formats: images and videos.</div>
+                        <label for="media_files" class="form-label">Upload Images</label>
+                        <div class="d-flex flex-column">
+                            <input type="file" class="form-control d-none" id="media_files" name="media_files[]" multiple accept=".jpg, .jpeg, .png, .gif, image/jpeg, image/png, image/jpg, image/gif">
+                            <div class="mb-2">
+                                <button type="button" id="custom_file_button" class="btn btn-outline-primary">
+                                    <i class="bi bi-images me-2"></i>Add Images
+                                </button>
+                            </div>
+                            <div class="alert alert-info py-2">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <small id="multiple_selection_help">You can select multiple images at once or add more images by clicking the button again</small>
+                            </div>
+                        </div>
+                        <div class="form-text">Accepted formats: jpeg, png, jpg, gif.</div>
+                        <div class="mt-2">
+                            <span id="selected_file_count" class="text-primary fw-bold"></span>
+                        </div>
+                        <div class="mt-3 mb-2" id="selected_files_list"></div>
+                        <div class="mt-3" id="image_preview_container" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
                     </div>
                 </div>
             </div>
@@ -331,8 +347,12 @@
                     'describeWeatherEvent': 'Describe the weather event in detail',
                     'descriptionPlaceholder': 'Please provide any additional details about the weather event...',
                     'mediaFiles': 'Media Files',
-                    'uploadImagesVideos': 'Upload Images and Videos',
-                    'multipleFilesNote': 'You can select multiple files. Accepted formats: images and videos.',
+                    'uploadImagesVideos': 'Upload Images',
+                    'multipleFilesNote': 'Accepted formats: jpeg, png, jpg, gif.',
+                    'filesSelected': 'files selected',
+                    'fileSelected': 'file selected',
+                    'selectImages': 'Add Images',
+                    'multipleSelectionHelp': 'You can select multiple images at once or add more images by clicking the button again',
                     'submitReport': 'Submit Report',
                     'language': 'Language',
                     'requestingLocationAccess': 'Requesting location access...',
@@ -386,8 +406,12 @@
                     'describeWeatherEvent': 'موسمی واقعے کی تفصیل بیان کریں',
                     'descriptionPlaceholder': 'براہ کرم موسمی واقعے کے بارے میں کوئی اضافی تفصیلات فراہم کریں...',
                     'mediaFiles': 'میڈیا فائلیں',
-                    'uploadImagesVideos': 'تصاویر اور ویڈیوز اپلوڈ کریں',
-                    'multipleFilesNote': 'آپ متعدد فائلیں منتخب کر سکتے ہیں۔ قبول کردہ فارمیٹس: تصاویر اور ویڈیوز۔',
+                    'uploadImagesVideos': 'تصاویر اپلوڈ کریں',
+                    'multipleFilesNote': 'قبول کردہ فارمیٹس: jpeg، png، jpg، gif۔',
+                    'filesSelected': 'فائلیں منتخب کی گئیں',
+                    'fileSelected': 'فائل منتخب کی گئی',
+                    'selectImages': 'تصاویر شامل کریں',
+                    'multipleSelectionHelp': 'آپ ایک ساتھ متعدد تصاویر منتخب کر سکتے ہیں یا بٹن پر دوبارہ کلک کر کے مزید تصاویر شامل کر سکتے ہیں',
                     'submitReport': 'رپورٹ جمع کرائیں',
                     'language': 'زبان',
                     'requestingLocationAccess': 'مقام تک رسائی کی درخواست کر رہا ہے...',
@@ -478,6 +502,9 @@
                 mapElementByText('label[for="event_date"]', 'dateOfWeatherEvent');
                 mapElementByText('label[for="event_time"]', 'timeOfWeatherEvent');
                 
+                // Map buttons
+                mapElementByText('#custom_file_button', 'selectImages');
+                
                 // Map weather type labels
                 mapElementByText('label[for="weather_rain"]', 'rain');
                 mapElementByText('label[for="weather_drizzle"]', 'drizzle');
@@ -507,6 +534,7 @@
                 mapElementByText('label[for="event_description"]', 'describeWeatherEvent');
                 mapElementByText('label[for="media_files"]', 'uploadImagesVideos');
                 mapElementByText('#weatherTypeError', 'duststormFogError');
+                mapElementByText('#multiple_selection_help', 'multipleSelectionHelp');
                 mapElementByAttribute('#event_description', 'placeholder', 'descriptionPlaceholder');
                 
                 // Map "Select all that apply" text
@@ -799,14 +827,237 @@
                 });
             }
 
-            // Form validation
+            // Image upload handling
+            const mediaFilesInput = document.getElementById('media_files');
+            const customFileButton = document.getElementById('custom_file_button');
+            const selectedFileCount = document.getElementById('selected_file_count');
+            const selectedFilesList = document.getElementById('selected_files_list');
+            const imagePreviewContainer = document.getElementById('image_preview_container');
+            
+            // Store uploaded files information for previews and display
+            const uploadedFiles = [];
+            
+            // Add click handler for the add images button
+            if (customFileButton && mediaFilesInput) {
+                customFileButton.addEventListener('click', function() {
+                    // Set multiple attribute to ensure multiple file selection
+                    mediaFilesInput.setAttribute('multiple', 'multiple');
+                    mediaFilesInput.click();
+                });
+            }
+            
+            // Handle file selection change from the file input
+            if (mediaFilesInput) {
+                mediaFilesInput.addEventListener('change', function(event) {
+                    if (event.target.files && event.target.files.length > 0) {
+                        // Add newly selected files to our tracking array (without clearing previous ones)
+                        Array.from(event.target.files).forEach(file => {
+                            uploadedFiles.push({
+                                file: file,
+                                id: Date.now() + Math.random().toString(36).substring(2, 10)
+                            });
+                        });
+                        
+                        // Update UI
+                        updateFilesUI();
+                    }
+                });
+            }
+            
+            // Function to update UI based on current files
+            function updateFilesUI() {
+                // Clear previous UI
+                imagePreviewContainer.innerHTML = '';
+                selectedFilesList.innerHTML = '';
+                
+                // Update file count display
+                if (uploadedFiles.length > 0) {
+                    const selectionText = uploadedFiles.length === 1 
+                        ? `${uploadedFiles.length} ${translations[currentLanguage]['fileSelected']}` 
+                        : `${uploadedFiles.length} ${translations[currentLanguage]['filesSelected']}`;
+                    selectedFileCount.textContent = selectionText;
+                    selectedFileCount.style.fontSize = '1.1rem';
+                    
+                    // Create file list with improved styling
+                    const fileList = document.createElement('ul');
+                    fileList.className = 'list-group';
+                    
+                    uploadedFiles.forEach((fileObj, index) => {
+                        const file = fileObj.file;
+                        const fileId = fileObj.id;
+                        
+                        const listItem = document.createElement('li');
+                        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        listItem.dataset.fileId = fileId;
+                        
+                        // Create filename display
+                        const fileInfo = document.createElement('div');
+                        fileInfo.className = 'd-flex align-items-center';
+                        
+                        const fileIcon = document.createElement('i');
+                        fileIcon.className = 'bi bi-file-earmark-image me-2';
+                        fileIcon.style.fontSize = '1.2rem';
+                        
+                        const fileName = document.createElement('span');
+                        fileName.textContent = file.name;
+                        
+                        fileInfo.appendChild(fileIcon);
+                        fileInfo.appendChild(fileName);
+                        listItem.appendChild(fileInfo);
+                        
+                        // Create actions container (filesize and delete button)
+                        const actionsContainer = document.createElement('div');
+                        actionsContainer.className = 'd-flex align-items-center';
+                        
+                        const badge = document.createElement('span');
+                        badge.className = 'badge bg-primary me-2';
+                        badge.textContent = `${(file.size / 1024).toFixed(1)} KB`;
+                        
+                        const removeButton = document.createElement('button');
+                        removeButton.className = 'btn btn-sm btn-outline-danger';
+                        removeButton.innerHTML = '<i class="bi bi-trash"></i>';
+                        removeButton.type = 'button';
+                        removeButton.title = 'Remove this file';
+                        
+                        // Add delete button event handler
+                        removeButton.addEventListener('click', function() {
+                            // Remove file from tracking array
+                            const fileIndex = uploadedFiles.findIndex(f => f.id === fileId);
+                            if (fileIndex !== -1) {
+                                uploadedFiles.splice(fileIndex, 1);
+                                updateFilesUI();
+                            }
+                        });
+                        
+                        actionsContainer.appendChild(badge);
+                        actionsContainer.appendChild(removeButton);
+                        listItem.appendChild(actionsContainer);
+                        
+                        fileList.appendChild(listItem);
+                        
+                        // Generate preview for this file
+                        if (file.type.match('image.*')) {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(e) {
+                                const imgWrapper = document.createElement('div');
+                                imgWrapper.className = 'image-preview';
+                                imgWrapper.style.position = 'relative';
+                                imgWrapper.style.margin = '5px';
+                                imgWrapper.dataset.fileId = fileId;
+                                
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.style.width = '120px';
+                                img.style.height = '120px';
+                                img.style.objectFit = 'cover';
+                                img.style.borderRadius = '4px';
+                                img.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+                                
+                                imgWrapper.appendChild(img);
+                                imagePreviewContainer.appendChild(imgWrapper);
+                            };
+                            
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                    
+                    selectedFilesList.appendChild(fileList);
+                } else {
+                    selectedFileCount.textContent = '';
+                }
+                
+                // Update the hidden file input for form submission by creating a new FileList-like object
+                updateFormFileInput();
+            }
+            
+            // Create a hidden file input with the current files before form submission
+            function updateFormFileInput() {
+                // When form is submitted, we'll create a FormData object with all files
+                // from our uploadedFiles array in the form submission handler
+                
+                // Clear existing input and create a new one to ensure it's fresh
+                const existingInput = document.getElementById('media_files');
+                const form = existingInput.parentNode.parentNode.parentNode.parentNode.parentNode;
+                
+                // Add a hidden field to signal that we have files
+                const filesCountField = document.getElementById('files_count') || document.createElement('input');
+                filesCountField.type = 'hidden';
+                filesCountField.id = 'files_count';
+                filesCountField.name = 'files_count';
+                filesCountField.value = uploadedFiles.length;
+                form.appendChild(filesCountField);
+            }
+            
+            // Form validation and submission
             const weatherObservationForm = document.getElementById('weatherObservationForm');
             if (weatherObservationForm) {
                 weatherObservationForm.addEventListener('submit', function(event) {
+                    // Check incompatibility first
                     if (!checkIncompatibility()) {
                         event.preventDefault();
+                        return;
                     }
-                    // Additional validation could be added here
+                    
+                    // If we have uploaded files, handle them with custom submission
+                    if (uploadedFiles.length > 0) {
+                        // Create a FormData object from the form
+                        const formData = new FormData(this);
+                        
+                        // Remove any existing files
+                        formData.delete('media_files[]');
+                        
+                        // Add each file from our tracking array
+                        uploadedFiles.forEach(fileObj => {
+                            formData.append('media_files[]', fileObj.file);
+                        });
+                        
+                        // Replace the form submission with our custom AJAX request
+                        event.preventDefault();
+                        
+                        // Disable submit button to prevent double submission
+                        const submitBtn = document.querySelector('button[type="submit"]');
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+                        }
+                        
+                        // Submit the form using fetch API
+                        fetch(this.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Form submission failed');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Redirect to the success page or show a success message
+                            if (data.redirect) {
+                                window.location.href = data.redirect;
+                            } else {
+                                // Show success message and reset form
+                                alert('Weather observation submitted successfully!');
+                                weatherObservationForm.reset();
+                                uploadedFiles.length = 0;
+                                updateFilesUI();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while submitting the form. Please try again.');
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = 'Submit Report';
+                            }
+                        });
+                    }
+                    // If no files, just let the form submit normally
                 });
             }
 

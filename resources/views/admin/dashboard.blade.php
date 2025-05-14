@@ -61,9 +61,53 @@
         </div>
     </div>
 
+    <!-- Weather Observations Stats -->
     <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow mb-4">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Weather Observations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="bg-light p-3 rounded">
+                                <h3 class="display-4">{{ $total_observations }}</h3>
+                                <p class="mb-0">Total Observations</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="bg-primary text-white p-3 rounded">
+                                <h3 class="display-4">{{ $pending_observations }}</h3>
+                                <p class="mb-0">Pending</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="bg-success text-white p-3 rounded">
+                                <h3 class="display-4">{{ $approved_observations }}</h3>
+                                <p class="mb-0">Approved</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="bg-danger text-white p-3 rounded">
+                                <h3 class="display-4">{{ $flagged_observations }}</h3>
+                                <p class="mb-0">Flagged</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="{{ route('admin.weather-observations.index') }}" class="btn btn-info">
+                            <i class="bi bi-cloud-sun"></i> Manage Weather Observations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
                 <div class="card-header">
                     <h5 class="mb-0">Recent Registration Requests</h5>
                 </div>
@@ -111,6 +155,60 @@
                     @else
                         <div class="alert alert-info mb-0">
                             <i class="bi bi-info-circle me-2"></i> No pending registration requests.
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Weather Observations</h5>
+                </div>
+                <div class="card-body">
+                    @if($recent_pending_observations->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Location</th>
+                                        <th>Date</th>
+                                        <th>Submitted By</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($recent_pending_observations as $observation)
+                                        <tr>
+                                            <td>{{ $observation->id }}</td>
+                                            <td>{{ $observation->location_city }}</td>
+                                            <td>{{ $observation->event_date->format('Y-m-d') }}</td>
+                                            <td>{{ $observation->user_name }}</td>
+                                            <td>
+                                                <a href="{{ route('admin.weather-observations.show', $observation) }}" class="btn btn-sm btn-info">
+                                                    <i class="bi bi-eye"></i> View
+                                                </a>
+                                                <form action="{{ route('admin.weather-observations.approve', $observation) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn btn-sm btn-success">
+                                                        <i class="bi bi-check-circle"></i> Approve
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-end mt-3">
+                            <a href="{{ route('admin.weather-observations.index', ['status' => 'pending']) }}" class="btn btn-info">View All Pending</a>
+                        </div>
+                    @else
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle me-2"></i> No pending weather observations.
                         </div>
                     @endif
                 </div>
