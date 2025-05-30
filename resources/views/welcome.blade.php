@@ -17,6 +17,9 @@
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+        
         <!-- AOS Animation Library -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         
@@ -164,6 +167,7 @@
                 align-items: center;
                 position: relative;
                 padding: 2rem 0;
+                padding-top: 6rem;
             }
             
             .hero-card {
@@ -1039,6 +1043,72 @@
         </style>
     </head>
     <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container-fluid">
+                <!-- Logo and brand name -->
+                <a class="navbar-brand d-flex align-items-center me-auto" href="{{ url('/') }}">
+                    <div class="me-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                        <img src="{{ asset('images/pmd-logo.png') }}" alt="PMD Logo" style="width: 38px; height: 38px; object-fit: contain;" onerror="this.src='https://via.placeholder.com/38x38/FF6B6B/ffffff?text=PMD'; this.onerror=null;">
+                    </div>
+                    <span class="fw-bold">Pakistan Meteorological Department</span>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        @guest
+                            <!-- Guest navigation (non-authenticated users) -->
+                            <li class="nav-item">
+                                <a href="{{ route('login') }}" class="nav-link">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('register') }}" class="btn btn-primary ms-2">Signup</a>
+                            </li>
+                        @else
+                            <!-- Authenticated user - only profile dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if(auth()->user()->profile_image)
+                                        <img src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="Profile" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                                    @else
+                                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                            <i class="bi bi-person-fill text-white"></i>
+                                        </div>
+                                    @endif
+                                    {{ auth()->user()->username }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('user.profile.edit') }}">
+                                            <i class="bi bi-person-gear"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('user.password.change.form') }}">
+                                            <i class="bi bi-key"></i> Change Password
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button class="dropdown-item text-danger" type="submit">
+                                                <i class="bi bi-box-arrow-right"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
         <div class="organic-bg"></div>
         <div class="floating-elements">
             <div class="blob"></div>
