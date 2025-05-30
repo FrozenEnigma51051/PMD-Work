@@ -1063,10 +1063,10 @@
                         @guest
                             <!-- Guest navigation (non-authenticated users) -->
                             <li class="nav-item">
-                                <a href="{{ route('login') }}" class="nav-link">Login</a>
+                                <a href="{{ route('login') }}" class="nav-link">Official Login</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('register') }}" class="btn btn-primary ms-2">Signup</a>
+                                <a href="{{ route('public.weather.observation.create') }}" class="btn btn-primary ms-2">Public Form</a>
                             </li>
                         @else
                             <!-- Authenticated user - only profile dropdown -->
