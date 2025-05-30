@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class ForgotPasswordController extends Controller
 {
@@ -64,11 +65,11 @@ class ForgotPasswordController extends Controller
         // Generate a secure token
         $token = Str::random(60);
 
-        // Store the token in the database
+        // Store the hashed token in the database for security
         DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $request->email],
             [
-                'token' => $token,
+                'token' => Hash::make($token),
                 'created_at' => Carbon::now()
             ]
         );
