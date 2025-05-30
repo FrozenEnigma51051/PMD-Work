@@ -64,6 +64,14 @@ class ResetPasswordController extends Controller
                 ->withErrors(['email' => 'Invalid password reset token.']);
         }
 
+        // Check if the token has expired (30 minutes)
+        if (Carbon::parse($passwordReset->created_at)->addMinutes(30)->isPast()) {
+            DB::table('password_reset_tokens')->where('token', $token)->delete();
+            
+            return redirect()->route('password.request')
+                ->withErrors(['email' => 'The password reset token has expired. Please request a new one.']);
+        }
+
         return view('auth.passwords.reset')->with(
             ['token' => $token, 'email' => $passwordReset->email]
         );
@@ -80,7 +88,6 @@ class ResetPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'code' => 'required|string|size:6',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -90,18 +97,18 @@ class ResetPasswordController extends Controller
             ->where('token', $request->token)
             ->first();
 
-        // Check if the reset record exists and the code matches
-        if (!$passwordReset || $passwordReset->code !== $request->code) {
+        // Check if the reset record exists
+        if (!$passwordReset) {
             return back()
-                ->withErrors(['code' => 'The verification code is incorrect.']);
+                ->withErrors(['email' => 'Invalid password reset token.']);
         }
 
-        // Check if the reset code has expired (1 hour)
-        if (Carbon::parse($passwordReset->created_at)->addHour()->isPast()) {
+        // Check if the reset token has expired (30 minutes)
+        if (Carbon::parse($passwordReset->created_at)->addMinutes(30)->isPast()) {
             DB::table('password_reset_tokens')->where('email', $request->email)->delete();
             
             return back()
-                ->withErrors(['code' => 'The verification code has expired. Please request a new one.']);
+                ->withErrors(['email' => 'The password reset token has expired. Please request a new one.']);
         }
 
         // Find the user
@@ -119,9 +126,7 @@ class ResetPasswordController extends Controller
         // Delete the password reset record
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
-        // Log the user in
-        Auth::login($user);
-
-        return redirect($this->redirectTo())->with('status', 'Your password has been reset!');
+        // Redirect to login page with success message
+        return redirect()->route('login')->with('status', 'Your password has been reset successfully! Please log in with your new password.');
     }
 }
