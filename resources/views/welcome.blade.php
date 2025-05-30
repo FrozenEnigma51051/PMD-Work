@@ -450,7 +450,7 @@
                     <i class="fas fa-cloud-sun weather-icon cloud-2"></i>
                     
                     <div class="logo-container">
-                        <img src="{{ asset('images/pmd-logo.jpg') }}" alt="PMD Logo" class="logo" onerror="this.src='https://via.placeholder.com/100x100?text=PMD'; this.onerror=null;">
+                        <img src="{{ asset('images/pmd-logo.png') }}" alt="PMD Logo" class="logo" onerror="this.src='https://via.placeholder.com/100x100?text=PMD'; this.onerror=null;">
                     </div>
                     <h1 class="department-title">Pakistan Meteorological Department</h1>
                     <p class="department-subtitle">National Weather Observation System</p>
