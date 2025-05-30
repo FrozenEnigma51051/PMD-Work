@@ -13,6 +13,7 @@ use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\WeatherObservationController;
 use App\Http\Controllers\PublicUser\PublicWeatherObservationController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\CheckIfAdmin;
 use App\Http\Middleware\CheckIfActive;
 use App\Http\Controllers\Admin\WeatherObservationManagementController;
@@ -28,9 +29,8 @@ use App\Http\Controllers\Admin\WeatherObservationManagementController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/observation/{observation}', [WelcomeController::class, 'getObservationDetails'])->name('observation.details');
 
 // Authentication Routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
