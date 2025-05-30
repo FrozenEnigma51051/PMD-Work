@@ -42,44 +42,7 @@
                                 <a href="{{ route('register') }}" class="btn btn-primary ms-2">Signup</a>
                             </li>
                         @else
-                            <!-- Authenticated user navigation -->
-                            @if(auth()->user()->role === 'admin')
-                                <!-- Admin navigation -->
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                                        <i class="bi bi-speedometer2"></i> Dashboard
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                                        <i class="bi bi-people"></i> Users
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.weather-observations.index') }}" class="nav-link {{ request()->routeIs('admin.weather-observations.*') ? 'active' : '' }}">
-                                        <i class="bi bi-cloud-rain"></i> Weather Observations
-                                    </a>
-                                </li>
-                            @else
-                                <!-- Regular user navigation -->
-                                <li class="nav-item">
-                                    <a href="{{ route('user.dashboard') }}" class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
-                                        <i class="bi bi-speedometer2"></i> Dashboard
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('user.weather.observation.create') }}" class="nav-link {{ request()->routeIs('user.weather.observation.*') ? 'active' : '' }}">
-                                        <i class="bi bi-cloud-plus"></i> Submit Weather Data
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('weather.observations') }}" class="nav-link {{ request()->routeIs('weather.observations') ? 'active' : '' }}">
-                                        <i class="bi bi-cloud-rain"></i> Weather Observations
-                                    </a>
-                                </li>
-                            @endif
-                            
-                            <!-- Common authenticated user items -->
+                            <!-- Authenticated user - only profile dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     @if(auth()->user()->profile_image)
