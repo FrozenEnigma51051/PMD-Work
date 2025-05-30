@@ -23,6 +23,9 @@
         <!-- AOS Animation Library -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         
+        <!-- App CSS - includes navbar fixes -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        
         <style>
             :root {
                 /* Sunset Storm Color Palette */
@@ -44,6 +47,8 @@
                 --shadow-organic: 0 20px 60px rgba(255, 107, 107, 0.15);
                 --shadow-teal: 0 15px 40px rgba(0, 106, 107, 0.2);
                 --shadow-warm: 0 10px 30px rgba(255, 230, 109, 0.25);
+                /* Navbar height for consistency with app.css */
+                --navbar-height: 56px;
             }
             
             * {
@@ -59,6 +64,7 @@
                 background: var(--neutral-warm);
                 overflow-x: hidden;
                 position: relative;
+                padding-top: var(--navbar-height); /* Use CSS variable from app.css */
             }
             
             /* Organic Background */

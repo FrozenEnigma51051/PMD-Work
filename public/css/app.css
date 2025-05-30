@@ -18,13 +18,18 @@
 body {
     min-height: 100vh;
     overflow-x: hidden;
+    padding-top: var(--navbar-height); /* Add padding to account for fixed navbar */
 }
 
 /* Navbar specific styles */
 .navbar {
     border-bottom: 1px solid #dee2e6;
     z-index: 1030;
-    position: relative;
+    position: fixed; /* Changed from relative to fixed */
+    top: 0; /* Ensure it's at the top */
+    left: 0; /* Ensure it starts from the left edge */
+    right: 0; /* Ensure it spans the full width */
+    width: 100%; /* Ensure full width */
 }
 
 .navbar-brand {
@@ -338,6 +343,28 @@ body {
 /* Custom utility classes */
 .text-shadow {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Alert flash positioning - positioned below fixed navbar */
+.alert-flash {
+    position: fixed;
+    top: calc(var(--navbar-height) + 20px); /* Position below the fixed navbar */
+    right: 20px;
+    max-width: 350px;
+    z-index: 9999;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    animation: fadeInRight 0.5s ease-in-out;
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* Print styles */
