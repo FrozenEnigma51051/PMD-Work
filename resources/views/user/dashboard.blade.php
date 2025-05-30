@@ -1,6 +1,6 @@
-@extends('layouts.user')
+@extends('layouts.app')
 
-@section('dashboard-content')
+@section('content')
 <div class="container py-4">
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
