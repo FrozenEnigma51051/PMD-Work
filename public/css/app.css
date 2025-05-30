@@ -11,6 +11,7 @@
     --sidebar-width: 280px;
     --sidebar-bg: #f8f9fa;
     --sidebar-border: #dee2e6;
+    --navbar-height: 56px;
 }
 
 /* Add any custom styles here */
@@ -80,15 +81,15 @@ body {
 /* Sidebar Styles */
 .sidebar {
     position: fixed;
-    top: 0;
+    top: var(--navbar-height);
     left: 0;
     width: var(--sidebar-width);
-    height: 100vh;
+    height: calc(100vh - var(--navbar-height));
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
-    z-index: 1050;
+    z-index: 1020;
     overflow-y: auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
@@ -101,8 +102,7 @@ body {
     background-color: var(--bs-primary);
     color: white;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 1rem;
-    margin-top: 56px; /* Account for navbar height */
+    padding: 1rem 0;
 }
 
 .sidebar-header .text-muted {
@@ -111,6 +111,8 @@ body {
 
 .sidebar-content {
     padding: 1rem 0;
+    height: calc(100% - 80px); /* Account for header and footer */
+    overflow-y: auto;
 }
 
 .sidebar-section {
@@ -185,12 +187,12 @@ body {
 /* Sidebar Overlay */
 .sidebar-overlay {
     position: fixed;
-    top: 0;
+    top: var(--navbar-height);
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - var(--navbar-height));
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1040;
+    z-index: 1010;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease-in-out;
@@ -204,7 +206,7 @@ body {
 /* Content Wrapper */
 .content-wrapper {
     transition: margin-left 0.3s ease-in-out;
-    min-height: calc(100vh - 56px); /* Account for navbar height */
+    min-height: calc(100vh - var(--navbar-height));
 }
 
 /* Sidebar Toggle Button */
