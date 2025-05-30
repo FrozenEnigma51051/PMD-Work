@@ -11,7 +11,7 @@ class WeatherObservationController extends Controller
 {
     public function create()
     {
-        return view('weather-observations.weather-observation-form');
+        return view('user.weather-observations.weather-observation-form');
     }
 
     public function store(Request $request)
@@ -87,6 +87,6 @@ class WeatherObservationController extends Controller
     public function index()
     {
         $observations = Auth::user()->weatherObservations()->latest()->get();
-        return view('weather-observations.index', compact('observations'));
+        return view('user.weather-observations.index', compact('observations'));
     }
 } 

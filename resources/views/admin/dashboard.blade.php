@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('content')
+@section('admin-content')
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-md-12">

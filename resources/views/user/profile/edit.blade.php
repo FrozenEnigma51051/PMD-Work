@@ -1,6 +1,6 @@
-@extends('layouts.user')
+@extends('layouts.app')
 
-@section('dashboard-content')
+@section('content')
 <div class="container py-4">
     <div class="row mb-4">
         <div class="col-md-8">
