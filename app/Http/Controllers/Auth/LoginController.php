@@ -64,6 +64,9 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
+        // Regenerate session to prevent session fixation attacks
+        $request->session()->regenerate();
+        
         // If the user is not active, log them out and show a validation error
         if ($user->status !== 'active') {
             auth()->logout();

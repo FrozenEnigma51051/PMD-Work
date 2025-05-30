@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class ForgotPasswordController extends Controller
 {
@@ -46,7 +47,7 @@ class ForgotPasswordController extends Controller
     }
 
     /**
-     * Send a reset code to the given user.
+     * Send a reset link to the given user.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
@@ -61,49 +62,45 @@ class ForgotPasswordController extends Controller
             return back()->withErrors(['email' => 'We can\'t find a user with that email address.']);
         }
 
-        // Generate a random 6-digit code
-        $code = sprintf('%06d', mt_rand(100000, 999999));
-        
-        // Generate token for security
+        // Generate a secure token
         $token = Str::random(60);
 
-        // Store the token and code in the database
+        // Store the hashed token in the database for security
         DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $request->email],
             [
-                'token' => $token,
-                'code' => $code,
+                'token' => Hash::make($token),
                 'created_at' => Carbon::now()
             ]
         );
 
-        // For development/testing: Store the code in the session to display it
-        // In production, you would use the email service instead
-        session()->flash('reset_code', $code);
-        session()->flash('reset_email', $user->email);
-
-        // In a real production environment, uncomment this to send actual emails
-        // $this->sendResetCodeEmail($user, $code, $token);
-
-        return redirect()->route('password.reset', ['token' => $token])
-            ->with('status', 'For testing purposes, your verification code is shown below.');
+        // Send the password reset email
+        try {
+            $this->sendResetEmail($user, $token);
+            
+            return back()->with('status', 'A password reset link has been sent to your email address.');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Failed to send password reset email: ' . $e->getMessage());
+            
+            return back()->withErrors(['email' => 'Unable to send password reset email. Please try again later.']);
+        }
     }
 
     /**
-     * Send the password reset code email.
+     * Send the password reset link email.
      *
      * @param  \App\Models\User  $user
-     * @param  string  $code
      * @param  string  $token
      * @return void
      */
-    protected function sendResetCodeEmail($user, $code, $token)
+    protected function sendResetEmail($user, $token)
     {
         $resetUrl = route('password.reset', ['token' => $token]);
         
-        Mail::send('emails.password-reset', ['user' => $user, 'code' => $code, 'resetUrl' => $resetUrl], function ($message) use ($user) {
+        Mail::send('emails.password-reset', ['user' => $user, 'resetUrl' => $resetUrl, 'token' => $token], function ($message) use ($user) {
             $message->to($user->email);
-            $message->subject('Your Password Reset Code');
+            $message->subject('Reset Your Password');
         });
     }
 }

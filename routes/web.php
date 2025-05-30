@@ -9,9 +9,11 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\WeatherObservationController;
 use App\Http\Controllers\PublicUser\PublicWeatherObservationController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\CheckIfAdmin;
 use App\Http\Middleware\CheckIfActive;
 use App\Http\Controllers\Admin\WeatherObservationManagementController;
@@ -27,9 +29,8 @@ use App\Http\Controllers\Admin\WeatherObservationManagementController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/observation/{observation}', [WelcomeController::class, 'getObservationDetails'])->name('observation.details');
 
 // Authentication Routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -76,6 +77,10 @@ Route::middleware(['auth', CheckIfActive::class])->prefix('user')->name('user.')
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('profile/image', [ProfileController::class, 'updateImage'])->name('profile.updateImage');
     Route::delete('profile/image', [ProfileController::class, 'removeImage'])->name('profile.removeImage');
+
+    // Password Management
+    Route::get('password/change', [ChangePasswordController::class, 'showChangePasswordForm'])->name('password.change.form');
+    Route::post('password/change', [ChangePasswordController::class, 'changePassword'])->name('password.change');
 
     // Weather Observations
     Route::get('weather-observation/create', [WeatherObservationController::class, 'create'])->name('weather.observation.create');

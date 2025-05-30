@@ -49,7 +49,7 @@ class ProfileController extends Controller
             'personal_number' => 'required|string|max:255|unique:users,personal_number,'.$user->id,
             'region_id' => 'required|exists:regions,id',
             'station_id' => 'required|exists:stations,id',
-            'designation' => 'required|in:Observer,Senior Observer',
+            'designation' => 'required|in:Director General,Chief Meteorologist,Director (Engineering) / Principal Engineer,Director / Principal Meteorologist,Senior Private Secretary,Deputy Director / Senior Meteorologist,Senior Programmer,Deputy Chief Administrative Officer,Sr. Electronic Engineer / Deputy Director (Engineering),Administrative Officer,Meteorologist,Accounts Officer,Librarian,Security Officer,Electronics Engineer,Programmer,Assistant Meteorologist,Superintendent,Assistant Private Secretary,Assistant Programmer,Assistant Mechanical Engineer,Assistant Electronic Engineer,Head Draughtsman,Assistant Ministerial,Data Entry Operator,Meteorological Assistant,Stenotypist,Sub Engineer (Electronics),Sub Engineer (Mechanical),Mechanical Assistant,Draughtsman,Upper Division Clerk,Lower Division Clerk,Senior Observer,Observer',
             'gender' => 'required|in:Male,Female,Other',
             'date_of_birth' => 'nullable|date',
             'description' => 'nullable|string|max:500',

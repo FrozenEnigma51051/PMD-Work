@@ -2,6 +2,14 @@
 
 @section('dashboard-content')
 <div class="container py-4">
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <div class="row mb-4">
         <div class="col-md-8">
             <h1>Dashboard</h1>
@@ -94,7 +102,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="d-grid">
-                                <a href="{{ route('password.request') }}" class="btn btn-outline-secondary btn-lg">
+                                <a href="{{ route('user.password.change.form') }}" class="btn btn-outline-secondary btn-lg">
                                     <i class="bi bi-key fs-5 me-2"></i>
                                     Change Password
                                 </a>

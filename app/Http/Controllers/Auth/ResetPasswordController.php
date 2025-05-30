@@ -55,17 +55,32 @@ class ResetPasswordController extends Controller
      */
     public function showResetForm(Request $request, $token)
     {
-        $passwordReset = DB::table('password_reset_tokens')
-            ->where('token', $token)
-            ->first();
+        $passwordResets = DB::table('password_reset_tokens')->get();
+        $validReset = null;
 
-        if (!$passwordReset) {
+        // Check each reset record to find a matching hashed token
+        foreach ($passwordResets as $passwordReset) {
+            if (Hash::check($token, $passwordReset->token)) {
+                $validReset = $passwordReset;
+                break;
+            }
+        }
+
+        if (!$validReset) {
             return redirect()->route('password.request')
                 ->withErrors(['email' => 'Invalid password reset token.']);
         }
 
+        // Check if the token has expired (30 minutes)
+        if (Carbon::parse($validReset->created_at)->addMinutes(30)->isPast()) {
+            DB::table('password_reset_tokens')->where('email', $validReset->email)->delete();
+            
+            return redirect()->route('password.request')
+                ->withErrors(['email' => 'The password reset token has expired. Please request a new one.']);
+        }
+
         return view('auth.passwords.reset')->with(
-            ['token' => $token, 'email' => $passwordReset->email]
+            ['token' => $token, 'email' => $validReset->email]
         );
     }
 
@@ -80,28 +95,34 @@ class ResetPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'code' => 'required|string|size:6',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Find the password reset record
-        $passwordReset = DB::table('password_reset_tokens')
+        // Find the password reset record with hashed token verification
+        $passwordResets = DB::table('password_reset_tokens')
             ->where('email', $request->email)
-            ->where('token', $request->token)
-            ->first();
+            ->get();
 
-        // Check if the reset record exists and the code matches
-        if (!$passwordReset || $passwordReset->code !== $request->code) {
-            return back()
-                ->withErrors(['code' => 'The verification code is incorrect.']);
+        $validReset = null;
+        foreach ($passwordResets as $passwordReset) {
+            if (Hash::check($request->token, $passwordReset->token)) {
+                $validReset = $passwordReset;
+                break;
+            }
         }
 
-        // Check if the reset code has expired (1 hour)
-        if (Carbon::parse($passwordReset->created_at)->addHour()->isPast()) {
+        // Check if the reset record exists
+        if (!$validReset) {
+            return back()
+                ->withErrors(['email' => 'Invalid password reset token.']);
+        }
+
+        // Check if the reset token has expired (30 minutes)
+        if (Carbon::parse($validReset->created_at)->addMinutes(30)->isPast()) {
             DB::table('password_reset_tokens')->where('email', $request->email)->delete();
             
             return back()
-                ->withErrors(['code' => 'The verification code has expired. Please request a new one.']);
+                ->withErrors(['email' => 'The password reset token has expired. Please request a new one.']);
         }
 
         // Find the user
@@ -116,12 +137,13 @@ class ResetPasswordController extends Controller
         $user->setRememberToken(Str::random(60));
         $user->save();
 
+        // Invalidate all sessions for this user
+        DB::table('sessions')->where('user_id', $user->id)->delete();
+
         // Delete the password reset record
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
-        // Log the user in
-        Auth::login($user);
-
-        return redirect($this->redirectTo())->with('status', 'Your password has been reset!');
+        // Redirect to login page with success message
+        return redirect()->route('login')->with('status', 'Your password has been reset successfully! Please log in with your new password.');
     }
 }
