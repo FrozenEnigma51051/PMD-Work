@@ -12,17 +12,18 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-            <div class="container">
+            <div class="container-fluid">
                 @auth
-                    <!-- Sidebar toggle button for authenticated users -->
-                    <button class="btn btn-outline-secondary me-3" type="button" id="sidebarToggle">
+                    <!-- Sidebar toggle button for authenticated users - moved more to the left -->
+                    <button class="btn btn-outline-secondary me-2" type="button" id="sidebarToggle">
                         <i class="bi bi-list"></i>
                     </button>
                 @endauth
 
-                <a class="navbar-brand d-flex align-items-center" href="{{ auth()->check() ? (auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard')) : url('/') }}">
-                    <div class="me-2" style="width: 40px; height: 40px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
-                        <i class="bi bi-cloud text-primary"></i>
+                <!-- Logo and brand name - moved more to the left -->
+                <a class="navbar-brand d-flex align-items-center me-auto" href="{{ auth()->check() ? (auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard')) : url('/') }}">
+                    <div class="me-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                        <img src="{{ asset('images/pmd-logo.png') }}" alt="PMD Logo" style="width: 38px; height: 38px; object-fit: contain;">
                     </div>
                     <span class="fw-bold">Pakistan Meteorological Department</span>
                 </a>
@@ -96,7 +97,11 @@
                     @endif
                     <div>
                         <h6 class="mb-0">{{ auth()->user()->username }}</h6>
-                        <small class="text-muted">{{ auth()->user()->designation }}</small>
+                        @if(auth()->user()->role !== 'admin')
+                            <small class="text-muted">{{ auth()->user()->designation }}</small>
+                        @else
+                            <small class="text-muted">System Administrator</small>
+                        @endif
                     </div>
                 </div>
             </div>
