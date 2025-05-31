@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\User\DashboardController;
@@ -46,6 +47,13 @@ Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestF
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+// Admin OTP Verification Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('otp/verify', [OtpController::class, 'showOtpForm'])->name('otp.form');
+    Route::post('otp/verify', [OtpController::class, 'verifyOtp'])->name('otp.verify');
+    Route::post('otp/resend', [OtpController::class, 'resendOtp'])->name('otp.resend');
+});
 
 // Dynamic Dropdown for Stations
 Route::get('/stations/by-region', [StationController::class, 'getStationsByRegion'])->name('stations.by-region');

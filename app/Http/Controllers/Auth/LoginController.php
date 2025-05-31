@@ -7,6 +7,10 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use App\Models\AdminOtp;
+use App\Mail\AdminOtp as AdminOtpMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -76,11 +80,34 @@ class LoginController extends Controller
             ]);
         }
 
-        // Redirect based on the user's role
+        // If the user is an admin, implement 2FA with OTP
         if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
+            // Logout the user immediately - they need to verify OTP first
+            auth()->logout();
+            
+            // Store user ID in session for OTP verification
+            Session::put('admin_login_user_id', $user->id);
+            
+            try {
+                // Generate OTP
+                $otp = AdminOtp::generateOtp($user->id);
+                
+                // Send OTP via email
+                Mail::to($user->email)->send(new AdminOtpMail($user, $otp->otp_code));
+                
+                // Redirect to OTP verification page
+                return redirect()->route('admin.otp.form')->with('success', 'OTP has been sent to your email address. Please check your email and enter the code below.');
+            } catch (\Exception $e) {
+                // Clear session if email fails
+                Session::forget('admin_login_user_id');
+                
+                throw ValidationException::withMessages([
+                    $this->username() => ['Failed to send OTP. Please try again later.'],
+                ]);
+            }
         }
 
+        // For regular users, proceed normally
         return redirect()->route('user.dashboard');
     }
 
