@@ -19,10 +19,10 @@ class AdminSeeder extends Seeder
             'email' => 'admin@demo.com',
             'username' => 'admin',
             'password' => Hash::make('admin123'),
-            'personal_number' => 'ADMIN001',
-            'region_id' => 1, // Punjab
-            'station_id' => 1, // Jhelum
-            'designation' => 'Senior Observer',
+            'personal_number' => null,
+            'region_id' => null,
+            'station_id' => null,
+            'designation' => null,
             'gender' => 'Male',
             'status' => 'active',
             'role' => 'admin',
