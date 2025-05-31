@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('personal_number')->unique();
-            $table->foreignId('region_id')->constrained();
-            $table->foreignId('station_id')->constrained();
-            $table->enum('designation', ['Director General', 'Chief Meteorologist', 'Director (Engineering) / Principal Engineer', 'Director / Principal Meteorologist', 'Senior Private Secretary', 'Deputy Director / Senior Meteorologist', 'Senior Programmer', 'Deputy Chief Administrative Officer', 'Sr. Electronic Engineer / Deputy Director (Engineering)', 'Administrative Officer', 'Meteorologist', 'Accounts Officer', 'Librarian', 'Security Officer', 'Electronics Engineer', 'Programmer', 'Assistant Meteorologist', 'Superintendent', 'Assistant Private Secretary', 'Assistant Programmer', 'Assistant Mechanical Engineer', 'Assistant Electronic Engineer', 'Head Draughtsman', 'Assistant Ministerial', 'Data Entry Operator', 'Meteorological Assistant', 'Stenotypist', 'Sub Engineer (Electronics)', 'Sub Engineer (Mechanical)', 'Mechanical Assistant', 'Draughtsman', 'Upper Division Clerk', 'Lower Division Clerk', 'Senior Observer', 'Observer']);
+            $table->string('personal_number')->unique()->nullable();
+            $table->unsignedBigInteger('region_id')->nullable();
+            $table->unsignedBigInteger('station_id')->nullable();
+            $table->enum('designation', ['Director General', 'Chief Meteorologist', 'Director (Engineering) / Principal Engineer', 'Director / Principal Meteorologist', 'Senior Private Secretary', 'Deputy Director / Senior Meteorologist', 'Senior Programmer', 'Deputy Chief Administrative Officer', 'Sr. Electronic Engineer / Deputy Director (Engineering)', 'Administrative Officer', 'Meteorologist', 'Accounts Officer', 'Librarian', 'Security Officer', 'Electronics Engineer', 'Programmer', 'Assistant Meteorologist', 'Superintendent', 'Assistant Private Secretary', 'Assistant Programmer', 'Assistant Mechanical Engineer', 'Assistant Electronic Engineer', 'Head Draughtsman', 'Assistant Ministerial', 'Data Entry Operator', 'Meteorological Assistant', 'Stenotypist', 'Sub Engineer (Electronics)', 'Sub Engineer (Mechanical)', 'Mechanical Assistant', 'Draughtsman', 'Upper Division Clerk', 'Lower Division Clerk', 'Senior Observer', 'Observer'])->nullable();
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->enum('role', ['admin', 'user'])->default('user');
@@ -29,10 +29,12 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            // Add foreign key constraints
+            $table->foreign('region_id')->references('id')->on('regions');
+            $table->foreign('station_id')->references('id')->on('stations');
         });
     }
-
-
 
     /**
      * Reverse the migrations.
